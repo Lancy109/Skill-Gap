@@ -32,7 +32,7 @@ export default function Hero() {
       </div>
 
       {/* Stats Bar */}
-      <div className="max-w-4xl mx-auto mt-24 grid grid-cols-1 md:grid-cols-3 bg-white rounded-[32px] p-10 shadow-xl shadow-slate-100 border border-slate-50">
+      <div className="max-w-4xl mx-auto mt-24 grid grid-cols-1 md:grid-cols-3 bg-white rounded-[32px] p-10 shadow-xl shadow-slate-200 border border-slate-300">
         <div className="space-y-1">
           <h2 className="text-4xl font-bold text-slate-900">10K+</h2>
           <p className="text-slate-400 font-medium">Active Learners</p>

@@ -6,6 +6,8 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md border-b border-slate-100 z-[100]">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         
+
+        
         {/* Logo Section */}
         <Link href="/" className="flex items-center gap-2 group">
           <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-100 group-hover:bg-indigo-700 transition-colors">
