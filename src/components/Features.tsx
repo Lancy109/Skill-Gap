@@ -18,8 +18,8 @@ const features = [
     iconColor: "bg-purple-600"
   },
   {
-    title: "AI Video Summarization",
-    desc: "Save time with AI-generated summaries of learning videos. Get key insights without watching hours of content.",
+    title: "Video Lectures",
+    desc: "High-quality video lessons taught by experienced instructors that let you learn anywhere, anytime.",
     icon: "🎥",
     tag: "Smart",
     color: "bg-pink-100",

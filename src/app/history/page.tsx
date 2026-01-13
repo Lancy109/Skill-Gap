@@ -1,149 +1,129 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { 
-  Menu, Search, Bell, LayoutDashboard, BookOpen, Pencil, 
-  History, Settings, LogOut, PlayCircle, Clock, Calendar, 
-  ChevronRight, UserCheck, CheckCircle2, Filter
+  PlayCircle, Clock, Calendar, 
+  ChevronRight, CheckCircle2, Filter, Trash2, Search
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Link from "next/link";
+import { useRouter } from 'next/navigation';
+import Navbar from '@/components/Navbar'; 
+import Sidebar from '@/components/Sidebar';
 
 const HistoryPage = () => {
+  const router = useRouter();
   const [isNavCollapsed, setNavCollapsed] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [activeTab, setActiveTab] = useState('history');
+  const [historyItems, setHistoryItems] = useState<any[]>([]);
 
   useEffect(() => {
     const saved = localStorage.getItem("nav-collapsed");
     if (saved !== null) setNavCollapsed(saved === "true");
     setIsMounted(true);
+    
+    loadLocalHistory();
+
+    // Listen for storage changes in case user completes a video in another tab
+    window.addEventListener("storageProgressUpdate", loadLocalHistory);
+    return () => window.removeEventListener("storageProgressUpdate", loadLocalHistory);
   }, []);
 
-  const historyItems = [
-    {
+  const loadLocalHistory = () => {
+    const localData = JSON.parse(localStorage.getItem("skill-gap-progress") || "{}");
+    
+    // Transform the skill-gap object into an array for the list
+    const items = Object.entries(localData).map(([skill, data]: [string, any]) => ({
       type: "course",
-      title: "Advanced System Design: Distributed Architectures",
-      creator: "Dr. Aris Thorne",
-      date: "Today, 2:45 PM",
-      duration: "45 mins watched",
-      status: "In Progress",
-      progress: 65,
-      icon: <PlayCircle size={18} className="text-indigo-600" />
-    },
-    {
-      type: "consultation",
-      title: "1-on-1 Strategy Session",
-      creator: "Sarah Jenkins",
-      date: "Yesterday",
-      duration: "Scheduled: Jan 15",
-      status: "Confirmed",
-      icon: <UserCheck size={18} className="text-emerald-600" />
-    },
-    {
-      type: "course",
-      title: "React Performance Optimization",
-      creator: "David Chen",
-      date: "Oct 24, 2023",
-      duration: "Completed",
-      status: "Finished",
-      progress: 100,
-      icon: <CheckCircle2 size={18} className="text-blue-600" />
-    },
-    {
-      type: "course",
-      title: "Introduction to Kubernetes",
-      creator: "Dr. Aris Thorne",
-      date: "Oct 22, 2023",
-      duration: "12 mins watched",
-      status: "In Progress",
-      progress: 15,
-      icon: <PlayCircle size={18} className="text-indigo-600" />
+      title: skill,
+      creator: "Platform Instructor", // You can expand your registry to include names
+      date: data.lastUpdated || "Recently viewed",
+      duration: `${data.watched?.length || 0} of ${data.total} lessons`,
+      status: data.watched?.length === data.total ? "Finished" : "In Progress",
+      progress: Math.round(((data.watched?.length || 0) / (data.total || 1)) * 100),
+      icon: data.watched?.length === data.total ? 
+        <CheckCircle2 size={18} className="text-emerald-600" /> : 
+        <PlayCircle size={18} className="text-indigo-600" />
+    }));
+
+    // Sort by progress (highest first) or add a timestamp to your data to sort by "Last Viewed"
+    setHistoryItems(items.sort((a, b) => b.progress - a.progress));
+  };
+
+  const handleToggleNav = () => {
+    setNavCollapsed(prev => {
+      const newState = !prev;
+      localStorage.setItem("nav-collapsed", String(newState));
+      return newState;
+    });
+  };
+
+  const clearHistory = () => {
+    if(confirm("Are you sure you want to clear your learning progress?")) {
+        localStorage.removeItem("skill-gap-progress");
+        loadLocalHistory();
+        window.dispatchEvent(new Event("storageProgressUpdate"));
     }
-  ];
+  };
 
   if (!isMounted) return <div className="min-h-screen bg-[#F8FAFC]" />;
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col text-slate-700 font-sans">
-      
-      {/* Top Navigation Bar */}
-      <nav className="sticky top-0 z-[60] bg-white border-b border-slate-100 px-5 h-14 flex items-center justify-between shadow-sm">
-        <div className="flex items-center gap-6">
-          <button onClick={() => setNavCollapsed(!isNavCollapsed)} className="p-1.5 hover:bg-slate-50 rounded-md text-slate-500 transition-colors">
-            <Menu size={18} />
-          </button>
-          <div className="flex items-center gap-2 cursor-pointer">
-            <div className="w-7 h-7 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-indigo-100">S</div>
-            <span className="font-bold text-slate-900 tracking-tight hidden sm:block">SkillGap</span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="h-8 w-8 rounded-full bg-slate-100 border border-slate-200 overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
-            <img src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff" alt="Profile" />
-          </div>
-        </div>
-      </nav>
+      <Navbar onToggleNav={handleToggleNav} />
 
       <div className="flex flex-1 overflow-hidden">
-        {/* SIDEBAR */}
-        <motion.aside 
-          animate={{ width: isNavCollapsed ? 70 : 240 }}
-          className="border-r border-slate-100 bg-white flex flex-col pt-6 overflow-hidden shrink-0">
-          <div className="px-3 space-y-1">
+        <Sidebar isCollapsed={isNavCollapsed} />
 
-            <Link href="/dashboard" passHref className="block">
-              <NavItem 
-                icon={<LayoutDashboard size={20}/>} 
-                label="Dashboard" 
-                active={activeTab === 'dashboard'} 
-                collapsed={isNavCollapsed} 
-                onClick={() => setActiveTab('dashboard')}
-            /> 
-            </Link>
-
-            <Link href="/browse" passHref className="block">
-              <NavItem 
-                icon={<BookOpen size={20}/>} 
-                label="Browse" 
-                active={activeTab === 'browse'} 
-                collapsed={isNavCollapsed} 
-                onClick={() => setActiveTab('browse')}
-            />
-            </Link>
-                        
-            <Link href="/creator" passHref className="block">
-              <NavItem 
-                icon={<Pencil size={20}/>} 
-                label="Creator" 
-                active={activeTab === 'creator'}
-                collapsed={isNavCollapsed} 
-                onClick={() => setActiveTab('creator')}
-            />
-            </Link>
-            <NavItem icon={<History size={20}/>} label="History" active={true} collapsed={isNavCollapsed} />
-          </div>
-        </motion.aside>
-
-        {/* Main Workspace */}
         <main className="flex-1 overflow-y-auto p-6 md:p-10">
-          <div className="max-w-4xl mx-auto space-y-8">
-            <header className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Activity History</h1>
-                <p className="text-sm text-slate-500 mt-1">Review your recent learning and consultation logs.</p>
-              </div>
-              <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors">
-                <Filter size={14} /> Filter
-              </button>
-            </header>
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key="history-content"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="max-w-4xl mx-auto space-y-8"
+            >
+              <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-6">
+                <div>
+                  <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
+                    Watch History
+                  </h1>
+                  <p className="text-sm text-slate-500 mt-1 font-medium">Continue where you left off in your learning paths.</p>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                    <button 
+                        onClick={clearHistory}
+                        className="flex items-center gap-2 px-4 py-2 text-rose-600 hover:bg-rose-50 rounded-xl text-xs font-bold transition-all"
+                    >
+                        <Trash2 size={14} /> Clear all history
+                    </button>
+                    <div className="h-4 w-[1px] bg-slate-200 mx-2" />
+                    <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 shadow-sm transition-all">
+                        <Filter size={14} /> Filter
+                    </button>
+                </div>
+              </header>
 
-            <div className="space-y-4">
-              {historyItems.map((item, idx) => (
-                <HistoryRow key={idx} item={item} />
-              ))}
-            </div>
-          </div>
+              <div className="space-y-3">
+                {historyItems.length > 0 ? (
+                  historyItems.map((item, idx) => (
+                    <HistoryRow 
+                        key={idx} 
+                        item={item} 
+                        onClick={() => router.push(`/browse?skill=${encodeURIComponent(item.title)}`)}
+                    />
+                  ))
+                ) : (
+                  <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-200">
+                    <div className="p-4 bg-slate-50 rounded-full w-fit mx-auto mb-4">
+                        <Search className="text-slate-300" />
+                    </div>
+                    <h3 className="text-slate-900 font-bold">No history found</h3>
+                    <p className="text-slate-500 text-sm mt-1">Start a course from the browse page to see it here.</p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
     </div>
@@ -151,63 +131,51 @@ const HistoryPage = () => {
 };
 
 // --- History Row Component ---
-const HistoryRow = ({ item }) => (
+const HistoryRow = ({ item, onClick }: any) => (
   <motion.div 
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="bg-white border border-slate-100 rounded-xl p-4 flex items-center gap-5 hover:border-indigo-100 transition-all group"
+    whileHover={{ x: 4 }}
+    onClick={onClick}
+    className="bg-white border border-slate-100 rounded-2xl p-4 flex items-center gap-5 hover:border-indigo-100 hover:shadow-xl hover:shadow-indigo-500/5 transition-all group cursor-pointer"
   >
-    {/* Icon Column */}
-    <div className={`p-3 rounded-xl bg-slate-50 group-hover:bg-indigo-50 transition-colors`}>
+    <div className="p-3 rounded-xl bg-slate-50 group-hover:bg-indigo-50 transition-colors shrink-0">
       {item.icon}
     </div>
 
-    {/* Details Column */}
     <div className="flex-1 min-w-0">
       <div className="flex items-center gap-2 mb-0.5">
-        <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded ${
-          item.type === 'course' ? 'bg-indigo-50 text-indigo-600' : 'bg-emerald-50 text-emerald-600'
+        <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded tracking-wider ${
+          item.status === 'Finished' ? 'bg-emerald-50 text-emerald-600' : 'bg-indigo-50 text-indigo-600'
         }`}>
-          {item.type}
+          {item.status}
         </span>
-        <span className="text-[10px] text-slate-400 font-medium flex items-center gap-1">
+        <span className="text-[10px] text-slate-400 font-bold flex items-center gap-1">
           <Calendar size={10} /> {item.date}
         </span>
       </div>
-      <h3 className="font-bold text-slate-900 text-sm truncate">{item.title}</h3>
-      <p className="text-xs text-slate-400">Led by {item.creator}</p>
+      <h3 className="font-bold text-slate-900 text-sm truncate group-hover:text-indigo-600 transition-colors">{item.title}</h3>
+      <p className="text-[11px] text-slate-400 font-medium tracking-tight">Skill Path</p>
     </div>
 
-    {/* Progress/Status Column */}
-    <div className="hidden sm:flex flex-col items-end gap-1.5 w-32">
+    <div className="hidden sm:flex flex-col items-end gap-1.5 w-40">
       <span className="text-[10px] font-bold text-slate-500 flex items-center gap-1">
         <Clock size={10} /> {item.duration}
       </span>
-      {item.type === 'course' && (
-        <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-indigo-500 transition-all duration-1000" 
-            style={{ width: `${item.progress}%` }} 
-          />
-        </div>
-      )}
+      <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+        <motion.div 
+          initial={{ width: 0 }}
+          animate={{ width: `${item.progress}%` }}
+          transition={{ duration: 1.2, ease: "circOut" }}
+          className={`h-full ${item.progress === 100 ? 'bg-emerald-500' : 'bg-indigo-500'}`} 
+        />
+      </div>
     </div>
 
-    {/* Action Column */}
     <div className="shrink-0">
-      <button className="p-2 hover:bg-slate-50 rounded-lg text-slate-300 hover:text-indigo-600 transition-all">
+      <div className="p-2 group-hover:bg-indigo-50 rounded-lg text-slate-300 group-hover:text-indigo-600 transition-all">
         <ChevronRight size={18} />
-      </button>
+      </div>
     </div>
   </motion.div>
-);
-
-// --- Reuse NavItem from previous pages ---
-const NavItem = ({ icon, label, active = false, collapsed = false }) => (
-  <button className={`relative w-full flex items-center transition-all duration-200 rounded-xl font-bold text-sm h-11 ${active ? "text-indigo-600 bg-indigo-50 shadow-sm" : "text-slate-400 hover:bg-slate-50"}`}>
-    <div className="flex items-center justify-center w-[70px] pr-6.5 shrink-0">{icon}</div>
-    {!collapsed && <span className="tracking-tight">{label}</span>}
-  </button>
 );
 
 export default HistoryPage;

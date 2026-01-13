@@ -4,12 +4,12 @@ import Features from "@/components/Features";
 import HowItWorks from "@/components/HowItWorks";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import Header from "@/components/Header";
 
 export default function Home() {
   return (
     <>
-      <Navbar />
+      <Header />
       <Hero />
       <HowItWorks />
       <Features />

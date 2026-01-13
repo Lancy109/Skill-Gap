@@ -17,7 +17,7 @@ export default function CTA() {
           </button>
         </Link>
         
-        <p className="mt-8 text-xs text-indigo-200 font-medium">No credit card required • Start learning in minutes</p>
+        <p className="mt-8 text-xs text-indigo-200 font-medium"> Start learning in minutes</p>
       </div>
     </section>
   );

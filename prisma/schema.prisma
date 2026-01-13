@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model languages {
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String      @unique
+  created_at DateTime?   @default(now()) @db.Timestamptz(6)
+  playlists  playlists[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model playlists {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  language_id  String    @db.Uuid
+  youtuber_id  String    @db.Uuid
+  title        String
+  playlist_url String
+  difficulty   String?
+  created_at   DateTime? @default(now()) @db.Timestamptz(6)
+  languages    languages @relation(fields: [language_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  youtubers    youtubers @relation(fields: [youtuber_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  videos       videos[]
+
+  @@unique([language_id, youtuber_id, title], map: "unique_language_youtuber_playlist")
+  @@index([language_id])
+  @@index([youtuber_id])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model tutorial_videos {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title         String
+  youtube_url   String
+  playlist_name String?
+  topic         String?
+  difficulty    String?
+  tags          String[]
+  created_at    DateTime? @default(now()) @db.Timestamptz(6)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model users {
+  id         BigInt   @id @default(autoincrement())
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  email      String   @unique
+  full_name  String
+  role       String
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model videos {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  playlist_id      String    @db.Uuid
+  title            String
+  youtube_video_id String
+  position         Int?
+  duration_seconds Int?
+  created_at       DateTime? @default(now()) @db.Timestamptz(6)
+  playlists        playlists @relation(fields: [playlist_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([playlist_id, position], map: "unique_playlist_position")
+  @@unique([playlist_id, youtube_video_id], map: "unique_playlist_video")
+  @@index([playlist_id])
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model youtubers {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  channel_url String
+  created_at  DateTime?   @default(now()) @db.Timestamptz(6)
+  playlists   playlists[]
+}
+
+model UserProgress {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  activeSkill String?
+  skills      Json     @default("{}")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

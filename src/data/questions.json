@@ -1,0 +1,1766 @@
+[
+    {
+        "id": "py_ai_1",
+        "category": "AI / ML",
+        "language": "Python",
+        "difficulty": "conceptual",
+        "text": "In Python's Scikit-Learn, what is the primary purpose of the 'fit' method in a transformer?",
+        "options": [
+            "To calculate parameters for data scaling based on the training data",
+            "To apply the learned transformation to new data",
+            "To evaluate the model accuracy on a test set",
+            "To perform cross-validation on the input features"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "py_ai_2",
+        "category": "AI / ML",
+        "language": "Python",
+        "difficulty": "conceptual",
+        "text": "Which of the following describes the 'Global Interpreter Lock' (GIL) in Python?",
+        "options": [
+            "A mechanism to prevent multiple Python processes from accessing the same file",
+            "A mutex that protects access to Python objects, preventing multiple threads from executing Python bytecodes at once",
+            "A memory management tool that automatically deletes unused variables",
+            "A security feature that prevents unauthorized code execution"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "py_ai_3",
+        "category": "AI / ML",
+        "language": "Python",
+        "difficulty": "applied",
+        "text": "Given a Pandas DataFrame 'df', which command would you use to find the correlation between all numerical columns?",
+        "options": [
+            "df.describe()",
+            "df.corr()",
+            "df.cov()",
+            "df.std()"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "py_ai_4",
+        "category": "AI / ML",
+        "language": "Python",
+        "difficulty": "applied",
+        "text": "In a PyTorch training loop, what is the purpose of calling 'optimizer.zero_grad()'?",
+        "options": [
+            "To reset the model weights to zero",
+            "To clear the gradients of all optimized tensors before the next backward pass",
+            "To set the learning rate to zero for the current epoch",
+            "To initialize the loss function"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "py_ai_5",
+        "category": "AI / ML",
+        "language": "Python",
+        "difficulty": "applied",
+        "text": "When using the 'requests' library in Python, how do you correctly pass parameters for a GET request?",
+        "options": [
+            "requests.get(url, data={'key': 'value'})",
+            "requests.get(url, json={'key': 'value'})",
+            "requests.get(url, params={'key': 'value'})",
+            "requests.get(url, header={'key': 'value'})"
+        ],
+        "correctIndex": 2
+    },
+    {
+        "id": "py_ai_6",
+        "category": "AI / ML",
+        "language": "Python",
+        "difficulty": "advanced",
+        "text": "What is the primary difference between __getattr__ and __getattribute__ in Python?",
+        "options": [
+            "__getattr__ is called for every attribute access, while __getattribute__ is only called if the attribute isn't found",
+            "__getattribute__ is called for every attribute access, while __getattr__ is only called if the attribute isn't found via normal lookup",
+            "__getattr__ handles methods, while __getattribute__ handles variables",
+            "There is no functional difference; one is for Python 2 and the other for Python 3"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "py_ai_7",
+        "category": "AI / ML",
+        "language": "Python",
+        "difficulty": "advanced",
+        "text": "How does a generator function differ from a regular function in Python memory management?",
+        "options": [
+            "It returns a list of all values at once",
+            "It creates a new thread for execution",
+            "It yields values one at a time and maintains state between calls, reducing memory overhead for large datasets",
+            "It prevents the garbage collector from running on its local variables"
+        ],
+        "correctIndex": 2
+    },
+    {
+        "id": "r_ai_1",
+        "category": "AI / ML",
+        "language": "R",
+        "difficulty": "conceptual",
+        "text": "In R, what is the fundamental difference between a 'list' and a 'vector'?",
+        "options": [
+            "Vectors can contain different data types, while lists must be uniform",
+            "Lists can contain elements of different types (heterogeneous), while vectors must contain the same type (homogeneous)",
+            "Vectors are always 2D, while lists are 1D",
+            "There is no difference between them in R"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "r_ai_2",
+        "category": "AI / ML",
+        "language": "R",
+        "difficulty": "conceptual",
+        "text": "Which R package is most commonly associated with the 'Grammar of Graphics' for data visualization?",
+        "options": [
+            "lattice",
+            "plotly",
+            "ggplot2",
+            "base"
+        ],
+        "correctIndex": 2
+    },
+    {
+        "id": "r_ai_3",
+        "category": "AI / ML",
+        "language": "R",
+        "difficulty": "applied",
+        "text": "Using the 'dplyr' package, which function is used to select a subset of columns from a dataframe?",
+        "options": [
+            "filter()",
+            "arrange()",
+            "select()",
+            "mutate()"
+        ],
+        "correctIndex": 2
+    },
+    {
+        "id": "r_ai_4",
+        "category": "AI / ML",
+        "language": "R",
+        "difficulty": "applied",
+        "text": "How do you handle missing values (NA) when calculating the mean of a vector 'x' in R?",
+        "options": [
+            "mean(x, rm.na = TRUE)",
+            "mean(x, na.remove = TRUE)",
+            "mean(x, na.rm = TRUE)",
+            "mean(na.omit(x))"
+        ],
+        "correctIndex": 2
+    },
+    {
+        "id": "r_ai_5",
+        "category": "AI / ML",
+        "language": "R",
+        "difficulty": "applied",
+        "text": "What is the purpose of the 'set.seed()' function in R machine learning workflows?",
+        "options": [
+            "To increase the speed of model training",
+            "To ensure reproducibility of results involving random number generation",
+            "To clear the cache of previously stored models",
+            "To initialize a neural network's weights to zero"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "r_ai_6",
+        "category": "AI / ML",
+        "language": "R",
+        "difficulty": "advanced",
+        "text": "Which mechanism does R use for 'copy-on-modify' behavior?",
+        "options": [
+            "Lazy evaluation",
+            "Functional programming",
+            "Memory referencing where a new object is created only when an existing object is changed",
+            "Strict garbage collection"
+        ],
+        "correctIndex": 2
+    },
+    {
+        "id": "r_ai_7",
+        "category": "AI / ML",
+        "language": "R",
+        "difficulty": "advanced",
+        "text": "In the context of S3 and S4 systems in R, what does 'dispatch' refer to?",
+        "options": [
+            "Sending data to a database",
+            "The process of selecting the correct method for a generic function based on the class of the input object",
+            "Parallelizing tasks across multiple CPU cores",
+            "Downloading packages from CRAN"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "js_fe_1",
+        "category": "Frontend",
+        "language": "JavaScript",
+        "difficulty": "conceptual",
+        "text": "What is 'Hoisting' in JavaScript?",
+        "options": [
+            "Moving all function calls to the top",
+            "JavaScript's default behavior of moving declarations to the top of the current scope before code execution",
+            "The process of compressing JS files for production",
+            "A way to bind a function to a specific context"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "js_fe_2",
+        "category": "Frontend",
+        "language": "JavaScript",
+        "difficulty": "conceptual",
+        "text": "What does 'Closure' allow a function to do?",
+        "options": [
+            "Access variables from its own scope only",
+            "Access variables from an outer function's scope even after the outer function has finished executing",
+            "End the execution of a script immediately",
+            "Convert a string into an object"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "js_fe_3",
+        "category": "Frontend",
+        "language": "JavaScript",
+        "difficulty": "applied",
+        "text": "How do you check if a variable 'arr' is an array in modern JavaScript?",
+        "options": [
+            "typeof arr === 'array'",
+            "arr instanceof Array",
+            "Array.isArray(arr)",
+            "Object.prototype.toString.call(arr) === '[object Array]'"
+        ],
+        "correctIndex": 2
+    },
+    {
+        "id": "js_fe_4",
+        "category": "Frontend",
+        "language": "JavaScript",
+        "difficulty": "applied",
+        "text": "What is the result of '2' + 2 - 1 in JavaScript?",
+        "options": [
+            "3",
+            "21",
+            "NaN",
+            "221"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "js_fe_5",
+        "category": "Frontend",
+        "language": "JavaScript",
+        "difficulty": "applied",
+        "text": "Which method is used to add an element to the end of an array and return the new length?",
+        "options": [
+            "pop()",
+            "shift()",
+            "push()",
+            "unshift()"
+        ],
+        "correctIndex": 2
+    },
+    {
+        "id": "js_fe_6",
+        "category": "Frontend",
+        "language": "JavaScript",
+        "difficulty": "advanced",
+        "text": "What is the difference between 'Microtasks' (e.g., Promises) and 'Macrotasks' (e.g., setTimeout) in the JS Event Loop?",
+        "options": [
+            "Microtasks run after Macrotasks",
+            "The entire Microtask queue is processed before the next Macrotask",
+            "Macrotasks have higher priority than Microtasks",
+            "They are executed in parallel using web workers"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "js_fe_7",
+        "category": "Frontend",
+        "language": "JavaScript",
+        "difficulty": "advanced",
+        "text": "What is a 'WeakMap' and how does it differ from a standard 'Map'?",
+        "options": [
+            "WeakMap allows primitive keys; Map does not",
+            "WeakMap keys must be objects and do not prevent garbage collection of those objects",
+            "WeakMap is faster for small datasets",
+            "WeakMap is a deprecated version of Map"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "ts_fe_1",
+        "category": "Frontend",
+        "language": "TypeScript",
+        "difficulty": "conceptual",
+        "text": "What is the primary purpose of TypeScript?",
+        "options": [
+            "To replace JavaScript",
+            "To add static typing to JavaScript",
+            "To speed up execution",
+            "To simplify CSS"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "ts_fe_2",
+        "category": "Frontend",
+        "language": "TypeScript",
+        "difficulty": "conceptual",
+        "text": "What is an 'interface' in TS?",
+        "options": [
+            "A way to define a class",
+            "A way to define the shape of an object",
+            "A runtime check",
+            "A CSS module"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "ts_fe_3",
+        "category": "Frontend",
+        "language": "TypeScript",
+        "difficulty": "applied",
+        "text": "How do you define an optional property in an interface?",
+        "options": [
+            "property!",
+            "property?",
+            "optional property",
+            "property: optional"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "ts_fe_4",
+        "category": "Frontend",
+        "language": "TypeScript",
+        "difficulty": "applied",
+        "text": "What does 'any' type do?",
+        "options": [
+            "Forces strict check",
+            "Allows any type, bypassing type checking",
+            "Only allows numbers",
+            "Only allows strings"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "ts_fe_5",
+        "category": "Frontend",
+        "language": "TypeScript",
+        "difficulty": "applied",
+        "text": "What is 'type assertion'?",
+        "options": [
+            "A way to convert types at runtime",
+            "A way to tell the compiler a variable is of a specific type",
+            "A way to assert truth",
+            "A type of loop"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "ts_fe_6",
+        "category": "Frontend",
+        "language": "TypeScript",
+        "difficulty": "advanced",
+        "text": "What are 'Generics' used for?",
+        "options": [
+            "To create reusable components that work with a variety of types",
+            "To generate random numbers",
+            "To handle CSS",
+            "To manage state"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "ts_fe_7",
+        "category": "Frontend",
+        "language": "TypeScript",
+        "difficulty": "advanced",
+        "text": "What is the purpose of 'tsconfig.json'?",
+        "options": [
+            "To store user data",
+            "To configure the TypeScript compiler options",
+            "To define UI components",
+            "To manage npm packages"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "html_fe_1",
+        "category": "Frontend",
+        "language": "HTML",
+        "difficulty": "conceptual",
+        "text": "What does HTML stand for?",
+        "options": [
+            "Hyper Text Markup Language",
+            "High Tech Modern Language",
+            "Hyperlink Text Management",
+            "Home Tool Markup"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "html_fe_2",
+        "category": "Frontend",
+        "language": "HTML",
+        "difficulty": "conceptual",
+        "text": "Which tag is used for an unordered list?",
+        "options": [
+            "<ol>",
+            "<ul>",
+            "<li>",
+            "<list>"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "html_fe_3",
+        "category": "Frontend",
+        "language": "HTML",
+        "difficulty": "applied",
+        "text": "Correct HTML for creating a hyperlink?",
+        "options": [
+            "<a>http://google.com</a>",
+            "<a href='http://google.com'>Google</a>",
+            "<a url='http://google.com'>Google</a>",
+            "<link>http://google.com</link>"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "html_fe_4",
+        "category": "Frontend",
+        "language": "HTML",
+        "difficulty": "applied",
+        "text": "Which tag is used to define an image?",
+        "options": [
+            "<image>",
+            "<img>",
+            "<picture>",
+            "<src>"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "html_fe_5",
+        "category": "Frontend",
+        "language": "HTML",
+        "difficulty": "applied",
+        "text": "Which character is used to indicate an end tag?",
+        "options": [
+            "*",
+            "<",
+            "/",
+            "^"
+        ],
+        "correctIndex": 2
+    },
+    {
+        "id": "html_fe_6",
+        "category": "Frontend",
+        "language": "HTML",
+        "difficulty": "advanced",
+        "text": "What is the purpose of the <canvas> element?",
+        "options": [
+            "To display text",
+            "To draw graphics via scripting (usually JavaScript)",
+            "To store data",
+            "To create forms"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "html_fe_7",
+        "category": "Frontend",
+        "language": "HTML",
+        "difficulty": "advanced",
+        "text": "Which attribute is used to provide an advisory text about an element?",
+        "options": [
+            "title",
+            "tooltip",
+            "alt",
+            "desc"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "css_fe_1",
+        "category": "Frontend",
+        "language": "CSS",
+        "difficulty": "conceptual",
+        "text": "What does CSS stand for?",
+        "options": [
+            "Creative Style Sheets",
+            "Cascading Style Sheets",
+            "Computer Style Sheets",
+            "Colorful Style Sheets"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "css_fe_2",
+        "category": "Frontend",
+        "language": "CSS",
+        "difficulty": "conceptual",
+        "text": "Where in an HTML document is the correct place to refer to an external style sheet?",
+        "options": [
+            "In the <body> section",
+            "At the end of the document",
+            "In the <head> section",
+            "In the <footer> section"
+        ],
+        "correctIndex": 2
+    },
+    {
+        "id": "css_fe_3",
+        "category": "Frontend",
+        "language": "CSS",
+        "difficulty": "applied",
+        "text": "Which property is used to change the background color?",
+        "options": [
+            "color",
+            "bgcolor",
+            "background-color",
+            "fill"
+        ],
+        "correctIndex": 2
+    },
+    {
+        "id": "css_fe_4",
+        "category": "Frontend",
+        "language": "CSS",
+        "difficulty": "applied",
+        "text": "Which CSS property controls the text size?",
+        "options": [
+            "text-style",
+            "font-style",
+            "text-size",
+            "font-size"
+        ],
+        "correctIndex": 3
+    },
+    {
+        "id": "css_fe_5",
+        "category": "Frontend",
+        "language": "CSS",
+        "difficulty": "applied",
+        "text": "How do you display hyperlinks without an underline?",
+        "options": [
+            "a {text-decoration:none;}",
+            "a {underline:none;}",
+            "a {text-style:no-underline;}",
+            "a {decoration:no-underline;}"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "css_fe_6",
+        "category": "Frontend",
+        "language": "CSS",
+        "difficulty": "advanced",
+        "text": "How do you make the text bold?",
+        "options": [
+            "font:bold;",
+            "font-weight:bold;",
+            "style:bold;",
+            "text-decoration:bold;"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "css_fe_7",
+        "category": "Frontend",
+        "language": "CSS",
+        "difficulty": "advanced",
+        "text": "Which property is used to change the left margin of an element?",
+        "options": [
+            "padding-left",
+            "margin-left",
+            "indent",
+            "spacing-left"
+        ],
+        "correctIndex": 1
+    },
+    {
+        "id": "node_be_1",
+        "category": "Backend",
+        "language": "JavaScript (Node.js)",
+        "difficulty": "conceptual",
+        "text": "What is Node.js built on?",
+        "options": [
+            "Chrome's V8 JavaScript engine",
+            "Python engine",
+            "Java Virtual Machine",
+            "Internet Explorer"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "node_be_2",
+        "category": "Backend",
+        "language": "JavaScript (Node.js)",
+        "difficulty": "conceptual",
+        "text": "What is 'npm'?",
+        "options": [
+            "Node Package Manager",
+            "Node Programming Machine",
+            "New Project Manager",
+            "Natural Processing Module"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "node_be_3",
+        "category": "Backend",
+        "language": "JavaScript (Node.js)",
+        "difficulty": "applied",
+        "text": "Which function is used to include a module in Node.js?",
+        "options": [
+            "require()",
+            "import()",
+            "get()",
+            "include()"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "node_be_4",
+        "category": "Backend",
+        "language": "JavaScript (Node.js)",
+        "difficulty": "applied",
+        "text": "Which core module is used for handling file paths?",
+        "options": [
+            "path",
+            "fs",
+            "os",
+            "url"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "node_be_5",
+        "category": "Backend",
+        "language": "JavaScript (Node.js)",
+        "difficulty": "applied",
+        "text": "How do you start a Node.js REPL?",
+        "options": [
+            "Type 'node' in terminal",
+            "node-repl",
+            "ctrl-c",
+            "npm start"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "node_be_6",
+        "category": "Backend",
+        "language": "JavaScript (Node.js)",
+        "difficulty": "advanced",
+        "text": "What is the result of applying 'EventEmitter' in Node.js?",
+        "options": [
+            "Managing event-driven programming",
+            "Handling HTTP requests",
+            "Connecting to database",
+            "Speeding up CPU"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "node_be_7",
+        "category": "Backend",
+        "language": "JavaScript (Node.js)",
+        "difficulty": "advanced",
+        "text": "What does 'stream' do in Node.js?",
+        "options": [
+            "Reads or writes data piece by piece",
+            "Buffers entire file in memory",
+            "Optimizes images",
+            "Manages database rows"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "py_be_1",
+        "category": "Backend",
+        "language": "Python",
+        "difficulty": "conceptual",
+        "text": "Which framework is most commonly used for building robust web APIs in Python?",
+        "options": [
+            "FastAPI / Django",
+            "Pandas",
+            "Matplotlib",
+            "NumPy"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "py_be_2",
+        "category": "Backend",
+        "language": "Python",
+        "difficulty": "conceptual",
+        "text": "What is 'pip'?",
+        "options": [
+            "The standard package manager for Python",
+            "A Python compiler",
+            "A data science library",
+            "A type of loop"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "py_be_3",
+        "category": "Backend",
+        "language": "Python",
+        "difficulty": "applied",
+        "text": "How do you create a virtual environment in Python?",
+        "options": [
+            "python -m venv myenv",
+            "python create env",
+            "new env",
+            "pip install env"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "py_be_4",
+        "category": "Backend",
+        "language": "Python",
+        "difficulty": "applied",
+        "text": "Which library is used for handling HTTP requests in Python?",
+        "options": [
+            "requests",
+            "http.lib",
+            "urlib2",
+            "fetch"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "py_be_5",
+        "category": "Backend",
+        "language": "Python",
+        "difficulty": "applied",
+        "text": "What is 'WSGI'?",
+        "options": [
+            "Web Service Gateway Interface",
+            "Web Server Graphical Interface",
+            "Window System Grouping",
+            "Web Socket Group Interface"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "py_be_6",
+        "category": "Backend",
+        "language": "Python",
+        "difficulty": "advanced",
+        "text": "Explain Python decorators.",
+        "options": [
+            "Used to modify the behavior of a function or class",
+            "Used to decorate UI",
+            "Used to add comments",
+            "Used for garbage collection"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "py_be_7",
+        "category": "Backend",
+        "language": "Python",
+        "difficulty": "advanced",
+        "text": "What are 'List Comprehensions'?",
+        "options": [
+            "A concise way to create lists",
+            "A way to compress lists",
+            "A way to compare lists",
+            "A memory management tool"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "java_be_1",
+        "category": "Backend",
+        "language": "Java",
+        "difficulty": "conceptual",
+        "text": "What is the JVM (Java Virtual Machine)?",
+        "options": [
+            "To provide a platform-independent environment",
+            "To speed up hard drive access",
+            "To manage the computer's CPU directly",
+            "To host web applications"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "java_be_2",
+        "category": "Backend",
+        "language": "Java",
+        "difficulty": "conceptual",
+        "text": "What is Spring Boot?",
+        "options": [
+            "An extension of Spring framework for easier configuration",
+            "A Java compiler",
+            "A mobile framework",
+            "A database engine"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "java_be_3",
+        "category": "Backend",
+        "language": "Java",
+        "difficulty": "applied",
+        "text": "Which keyword is used to inherit a class in Java?",
+        "options": [
+            "extends",
+            "implements",
+            "inherits",
+            "super"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "java_be_4",
+        "category": "Backend",
+        "language": "Java",
+        "difficulty": "applied",
+        "text": "What is Maven used for?",
+        "options": [
+            "Project management and build automation",
+            "Editing code",
+            "Compiling only",
+            "Database design"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "java_be_5",
+        "category": "Backend",
+        "language": "Java",
+        "difficulty": "applied",
+        "text": "What is use of 'interface' in Java?",
+        "options": [
+            "To define a contract/blueprint for classes",
+            "To define specific implementation",
+            "To create a variable",
+            "To run the app"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "java_be_6",
+        "category": "Backend",
+        "language": "Java",
+        "difficulty": "advanced",
+        "text": "Explain 'Garbage Collection' in Java.",
+        "options": [
+            "Automated process of deleting unused objects",
+            "Manual memory deletion",
+            "A tool to delete files",
+            "A way to optimize code"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "java_be_7",
+        "category": "Backend",
+        "language": "Java",
+        "difficulty": "advanced",
+        "text": "What is the purpose of the 'static' keyword?",
+        "options": [
+            "Belongs to the class rather than an instance",
+            "Variable changes frequently",
+            "Method is private",
+            "Method is asynchronous"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cs_be_1",
+        "category": "Backend",
+        "language": "C#",
+        "difficulty": "conceptual",
+        "text": "Which company developed C#?",
+        "options": [
+            "Microsoft",
+            "Apple",
+            "Google",
+            "Oracle"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cs_be_2",
+        "category": "Backend",
+        "language": "C#",
+        "difficulty": "conceptual",
+        "text": "What is .NET Core?",
+        "options": [
+            "A cross-platform, open-source version of .NET",
+            "A subset of C#",
+            "A framework for Windows only",
+            "An IDE"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cs_be_3",
+        "category": "Backend",
+        "language": "C#",
+        "difficulty": "applied",
+        "text": "Which keyword is used for handling exceptions?",
+        "options": [
+            "try-catch",
+            "catch",
+            "error",
+            "exception"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cs_be_4",
+        "category": "Backend",
+        "language": "C#",
+        "difficulty": "applied",
+        "text": "What is Entity Framework?",
+        "options": [
+            "An Object-Relational Mapper (ORM)",
+            "A UI library",
+            "A compiler",
+            "A testing tool"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cs_be_5",
+        "category": "Backend",
+        "language": "C#",
+        "difficulty": "applied",
+        "text": "What is LINQ?",
+        "options": [
+            "Language Integrated Query",
+            "Low Interface Network Query",
+            "Logic Integration Node",
+            "Local Information Network"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cs_be_6",
+        "category": "Backend",
+        "language": "C#",
+        "difficulty": "advanced",
+        "text": "What is 'Async/Await' for?",
+        "options": [
+            "Asynchronous programming",
+            "Synchronous execution",
+            "Database connection only",
+            "Faster calculations"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cs_be_7",
+        "category": "Backend",
+        "language": "C#",
+        "difficulty": "advanced",
+        "text": "What does 'Dependency Injection' help with?",
+        "options": [
+            "Decoupling components for better testability",
+            "Making code complex",
+            "Injecting viruses",
+            "Adding dependencies"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "dart_mob_1",
+        "category": "Mobile Development",
+        "language": "Dart (Flutter)",
+        "difficulty": "conceptual",
+        "text": "What is Flutter?",
+        "options": [
+            "A UI toolkit for building natively compiled apps",
+            "A programming language",
+            "A database wrapper",
+            "An IDE"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "dart_mob_2",
+        "category": "Mobile Development",
+        "language": "Dart (Flutter)",
+        "difficulty": "conceptual",
+        "text": "What is Dart?",
+        "options": [
+            "The programming language used to build Flutter apps",
+            "A framework",
+            "A package manager",
+            "A server-side engine"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "dart_mob_3",
+        "category": "Mobile Development",
+        "language": "Dart (Flutter)",
+        "difficulty": "applied",
+        "text": "What are widgets in Flutter?",
+        "options": [
+            "Everything in Flutter is a widget (UI components)",
+            "Small icons",
+            "Database tables",
+            "Network requests"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "dart_mob_4",
+        "category": "Mobile Development",
+        "language": "Dart (Flutter)",
+        "difficulty": "applied",
+        "text": "How do you run a Flutter app?",
+        "options": [
+            "flutter run",
+            "flutter start",
+            "dart start",
+            "npm run flutter"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "dart_mob_5",
+        "category": "Mobile Development",
+        "language": "Dart (Flutter)",
+        "difficulty": "applied",
+        "text": "What is 'pubspec.yaml' used for?",
+        "options": [
+            "Managing project dependencies and metadata",
+            "Storing code",
+            "Configuring the server",
+            "Defining the UI"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "dart_mob_6",
+        "category": "Mobile Development",
+        "language": "Dart (Flutter)",
+        "difficulty": "advanced",
+        "text": "What is 'Hot Reload'?",
+        "options": [
+            "Quickly seeing changes without restarting the app",
+            "Rebooting the phone",
+            "Clearing cache",
+            "Deleting the app"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "dart_mob_7",
+        "category": "Mobile Development",
+        "language": "Dart (Flutter)",
+        "difficulty": "advanced",
+        "text": "What is 'InheritedWidget' used for?",
+        "options": [
+            "Passing data down the widget tree",
+            "Creating a new theme",
+            "Managing animations",
+            "Closing the app"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "kot_mob_1",
+        "category": "Mobile Development",
+        "language": "Kotlin (Android)",
+        "difficulty": "conceptual",
+        "text": "Which company officially supports Kotlin for Android?",
+        "options": [
+            "Google",
+            "Apple",
+            "Microsoft",
+            "Facebook"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "kot_mob_2",
+        "category": "Mobile Development",
+        "language": "Kotlin (Android)",
+        "difficulty": "conceptual",
+        "text": "What is Jetpack Compose?",
+        "options": [
+            "Modern toolkit for building native UI in Kotlin",
+            "A layout tool in XML",
+            "A database engine",
+            "A networking library"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "kot_mob_3",
+        "category": "Mobile Development",
+        "language": "Kotlin (Android)",
+        "difficulty": "applied",
+        "text": "What is 'Null Safety' in Kotlin?",
+        "options": [
+            "A feature to prevent null pointer exceptions",
+            "Code is never null",
+            "A way to delete nulls",
+            "An error handling library"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "kot_mob_4",
+        "category": "Mobile Development",
+        "language": "Kotlin (Android)",
+        "difficulty": "applied",
+        "text": "What is an Activity in Android?",
+        "options": [
+            "A single screen with a user interface",
+            "A fitness tracker",
+            "A background service",
+            "A database call"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "kot_mob_5",
+        "category": "Mobile Development",
+        "language": "Kotlin (Android)",
+        "difficulty": "applied",
+        "text": "What is a ViewModel?",
+        "options": [
+            "Used to store and manage UI-related data",
+            "A style of coding",
+            "A design tool",
+            "A type of fragment"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "kot_mob_6",
+        "category": "Mobile Development",
+        "language": "Kotlin (Android)",
+        "difficulty": "advanced",
+        "text": "What are Extension Functions?",
+        "options": [
+            "Ability to extend a class with new functionality",
+            "Functions for files",
+            "Built-in functions",
+            "Functions that run on a server"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "kot_mob_7",
+        "category": "Mobile Development",
+        "language": "Kotlin (Android)",
+        "difficulty": "advanced",
+        "text": "What is Hilt used for?",
+        "options": [
+            "Dependency injection for Android",
+            "Dependency selection",
+            "Image loading",
+            "Database operations"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "sw_mob_1",
+        "category": "Mobile Development",
+        "language": "Swift (iOS)",
+        "difficulty": "conceptual",
+        "text": "What language replaced Objective-C for iOS development?",
+        "options": [
+            "Swift",
+            "Java",
+            "C++",
+            "Kotlin"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "sw_mob_2",
+        "category": "Mobile Development",
+        "language": "Swift (iOS)",
+        "difficulty": "conceptual",
+        "text": "What is SwiftUI?",
+        "options": [
+            "A declarative framework for building UI",
+            "A new language",
+            "A cloud service",
+            "A database for iOS"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "sw_mob_3",
+        "category": "Mobile Development",
+        "language": "Swift (iOS)",
+        "difficulty": "applied",
+        "text": "What is an 'Optional' in Swift?",
+        "options": [
+            "A type that represents a value or the absence of it (nil)",
+            "An extra feature",
+            "A settings menu",
+            "A choice between two functions"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "sw_mob_4",
+        "category": "Mobile Development",
+        "language": "Swift (iOS)",
+        "difficulty": "applied",
+        "text": "How do you define a constant in Swift?",
+        "options": [
+            "let",
+            "const",
+            "var",
+            "final"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "sw_mob_5",
+        "category": "Mobile Development",
+        "language": "Swift (iOS)",
+        "difficulty": "applied",
+        "text": "What is Xcode?",
+        "options": [
+            "Apple's IDE for macOS/iOS development",
+            "A type of phone",
+            "A game engine",
+            "An image viewer"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "sw_mob_6",
+        "category": "Mobile Development",
+        "language": "Swift (iOS)",
+        "difficulty": "advanced",
+        "text": "What is a Closure in Swift?",
+        "options": [
+            "Self-contained block of functionality",
+            "Closing an app",
+            "The end of a class",
+            "A private variable"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "sw_mob_7",
+        "category": "Mobile Development",
+        "language": "Swift (iOS)",
+        "difficulty": "advanced",
+        "text": "What is ARC?",
+        "options": [
+            "Automatic Reference Counting",
+            "Arithmetic Runtime Check",
+            "Apple Resource Center",
+            "Asynchronous Route Control"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cpp_ai_1",
+        "category": "AI / ML",
+        "language": "C++",
+        "difficulty": "conceptual",
+        "text": "Why use C++ for ML?",
+        "options": [
+            "Performance and low-level resource control",
+            "Easier writing",
+            "Better visualization",
+            "More libraries than Python"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cpp_ai_2",
+        "category": "AI / ML",
+        "language": "C++",
+        "difficulty": "conceptual",
+        "text": "What library is commonly used for linear algebra in C++ for ML?",
+        "options": [
+            "Eigen / Armadillo",
+            "Pandas",
+            "Requests",
+            "Flask"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cpp_ai_3",
+        "category": "AI / ML",
+        "language": "C++",
+        "difficulty": "applied",
+        "text": "What is ONNX?",
+        "options": [
+            "Open Neural Network Exchange",
+            "A database",
+            "A C++ compiler",
+            "A game engine"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cpp_ai_4",
+        "category": "AI / ML",
+        "language": "C++",
+        "difficulty": "applied",
+        "text": "What is the purpose of CUDA?",
+        "options": [
+            "Parallel computing platform for GPUs by NVIDIA",
+            "Editing photos",
+            "Database encryption",
+            "Network protocol"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cpp_ai_5",
+        "category": "AI / ML",
+        "language": "C++",
+        "difficulty": "applied",
+        "text": "What is the 'STL'?",
+        "options": [
+            "Standard Template Library",
+            "Single Thread Logic",
+            "Simple Text Language",
+            "System Testing Level"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cpp_ai_6",
+        "category": "AI / ML",
+        "language": "C++",
+        "difficulty": "advanced",
+        "text": "What are 'Smart Pointers' for?",
+        "options": [
+            "Automatic memory management",
+            "Fast typing",
+            "Better UI design",
+            "Encryption"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cpp_ai_7",
+        "category": "AI / ML",
+        "language": "C++",
+        "difficulty": "advanced",
+        "text": "Explain RAII in C++.",
+        "options": [
+            "Resource Acquisition Is Initialization",
+            "Random Access Input Interface",
+            "Robust AI Implementation",
+            "Render All Image Items"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cs_desk_1",
+        "category": "Desktop Applications",
+        "language": "C#",
+        "difficulty": "conceptual",
+        "text": "Primary platform for C# desktop apps?",
+        "options": [
+            "Windows",
+            "Linux",
+            "macOS",
+            "Android"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cs_desk_2",
+        "category": "Desktop Applications",
+        "language": "C#",
+        "difficulty": "conceptual",
+        "text": "What is WPF?",
+        "options": [
+            "Windows Presentation Foundation",
+            "Web Page Framework",
+            "Windows Processing Factor",
+            "Wide Path Flow"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cs_desk_3",
+        "category": "Desktop Applications",
+        "language": "C#",
+        "difficulty": "applied",
+        "text": "What is XAML?",
+        "options": [
+            "Markup language for defining UI",
+            "A programming language",
+            "A data storage format",
+            "A type of compiler"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cs_desk_4",
+        "category": "Desktop Applications",
+        "language": "C#",
+        "difficulty": "applied",
+        "text": "What is MVVM?",
+        "options": [
+            "Model-View-ViewModel architectural pattern",
+            "Method View Value Model",
+            "Most Valuable Variable Method",
+            "Multi-View Volume Map"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cs_desk_5",
+        "category": "Desktop Applications",
+        "language": "C#",
+        "difficulty": "applied",
+        "text": "What is WinForms?",
+        "options": [
+            "Older UI framework for Windows desktop",
+            "Web forms",
+            "A winning strategy",
+            "A database form"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cs_desk_6",
+        "category": "Desktop Applications",
+        "language": "C#",
+        "difficulty": "advanced",
+        "text": "What is WinUI 3?",
+        "options": [
+            "The latest UI framework for Windows",
+            "A gaming engine",
+            "A web browser",
+            "A backend server"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cs_desk_7",
+        "category": "Desktop Applications",
+        "language": "C#",
+        "difficulty": "advanced",
+        "text": "What is the purpose of the App.xaml file?",
+        "options": [
+            "To define application-wide resources",
+            "To store user password",
+            "To write business logic",
+            "To connect to the internet"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "java_desk_1",
+        "category": "Desktop Applications",
+        "language": "Java",
+        "difficulty": "conceptual",
+        "text": "Which library is the modern standard for Java UI?",
+        "options": [
+            "JavaFX",
+            "Swing",
+            "Qt",
+            "React"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "java_desk_2",
+        "category": "Desktop Applications",
+        "language": "Java",
+        "difficulty": "conceptual",
+        "text": "Which library is the old standard for Java UI?",
+        "options": [
+            "Swing / AWT",
+            "JavaFX",
+            "Spring",
+            "Hibernate"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "java_desk_3",
+        "category": "Desktop Applications",
+        "language": "Java",
+        "difficulty": "applied",
+        "text": "What is FXML?",
+        "options": [
+            "XML-based language for defining JavaFX UI",
+            "A file for data",
+            "A Java compiler",
+            "A networking protocol"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "java_desk_4",
+        "category": "Desktop Applications",
+        "language": "Java",
+        "difficulty": "applied",
+        "text": "What is JPackage?",
+        "options": [
+            "Tool for packaging Java apps into native installers",
+            "A way to wrap npm",
+            "A cloud platform",
+            "A type of coffee"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "java_desk_5",
+        "category": "Desktop Applications",
+        "language": "Java",
+        "difficulty": "applied",
+        "text": "How do you handle clicks in JavaFX?",
+        "options": [
+            "Event handlers and listeners",
+            "Hardcoding jumps",
+            "Writing to a file",
+            "Asking the console"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "java_desk_6",
+        "category": "Desktop Applications",
+        "language": "Java",
+        "difficulty": "advanced",
+        "text": "What is 'Scene Builder'?",
+        "options": [
+            "Visual layout tool for JavaFX",
+            "A movie tool",
+            "A code editor",
+            "A database manager"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "java_desk_7",
+        "category": "Desktop Applications",
+        "language": "Java",
+        "difficulty": "advanced",
+        "text": "What is the 'Task' class used for in JavaFX?",
+        "options": [
+            "To run long tasks without freezing the UI",
+            "To create a list of work",
+            "To manage the server",
+            "To delete files"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cpp_desk_1",
+        "category": "Desktop Applications",
+        "language": "C++",
+        "difficulty": "conceptual",
+        "text": "Which framework is most popular for cross-platform C++ apps?",
+        "options": [
+            "Qt",
+            "React",
+            "Django",
+            "Angular"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cpp_desk_2",
+        "category": "Desktop Applications",
+        "language": "C++",
+        "difficulty": "conceptual",
+        "text": "What is 'wxWidgets'?",
+        "options": [
+            "Another cross-platform C++ UI library",
+            "A type of phone",
+            "A web browser",
+            "A search engine"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cpp_desk_3",
+        "category": "Desktop Applications",
+        "language": "C++",
+        "difficulty": "applied",
+        "text": "What is 'CMake'?",
+        "options": [
+            "Cross-platform build system generator",
+            "A code editor",
+            "A database engine",
+            "A graphics library"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cpp_desk_4",
+        "category": "Desktop Applications",
+        "language": "C++",
+        "difficulty": "applied",
+        "text": "What is 'ImGui'?",
+        "options": [
+            "Immediate Mode Graphical User Interface",
+            "A login system",
+            "An image hosting site",
+            "A compiler"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cpp_desk_5",
+        "category": "Desktop Applications",
+        "language": "C++",
+        "difficulty": "applied",
+        "text": "What is 'vcpkg'?",
+        "options": [
+            "A C++ library manager",
+            "A virus",
+            "A cloud service",
+            "A networking tool"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cpp_desk_6",
+        "category": "Desktop Applications",
+        "language": "C++",
+        "difficulty": "advanced",
+        "text": "What is the purpose of 'Signals and Slots' in Qt?",
+        "options": [
+            "To facilitate communication between objects",
+            "To speed up CPU",
+            "To manage memory",
+            "To encrypt data"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "cpp_desk_7",
+        "category": "Desktop Applications",
+        "language": "C++",
+        "difficulty": "advanced",
+        "text": "What does a 'Main Loop' do in a desktop app?",
+        "options": [
+            "Processes events from the OS",
+            "Repeats code once",
+            "Deletes variables",
+            "Closes the app"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "py_desk_1",
+        "category": "Desktop Applications",
+        "language": "Python",
+        "difficulty": "conceptual",
+        "text": "Standard library for Python GUI?",
+        "options": [
+            "Tkinter",
+            "PyQt",
+            "Kivy",
+            "Django"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "py_desk_2",
+        "category": "Desktop Applications",
+        "language": "Python",
+        "difficulty": "conceptual",
+        "text": "Powerful commercial GUI library for Python?",
+        "options": [
+            "PyQt / PySide",
+            "Tkinter",
+            "Flask",
+            "Pandas"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "py_desk_3",
+        "category": "Desktop Applications",
+        "language": "Python",
+        "difficulty": "applied",
+        "text": "Tool for converting Python scripts to executables?",
+        "options": [
+            "PyInstaller / cx_Freeze",
+            "pip",
+            "python-to-exe",
+            "zip"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "py_desk_4",
+        "category": "Desktop Applications",
+        "language": "Python",
+        "difficulty": "applied",
+        "text": "What is 'Kivy' used for?",
+        "options": [
+            "Touch-enabled Python UI",
+            "Databases",
+            "Scientific calculation",
+            "Web servers"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "py_desk_5",
+        "category": "Desktop Applications",
+        "language": "Python",
+        "difficulty": "applied",
+        "text": "What is 'CustomTkinter'?",
+        "options": [
+            "Modern wrapper around Tkinter",
+            "A custom computer",
+            "A type of list",
+            "A security plugin"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "py_desk_6",
+        "category": "Desktop Applications",
+        "language": "Python",
+        "difficulty": "advanced",
+        "text": "What is the GIL's impact on Python GUI apps?",
+        "options": [
+            "Can cause the UI to freeze if tasks run in main thread",
+            "It makes UI faster",
+            "It prevents UI from opening",
+            "It has no impact"
+        ],
+        "correctIndex": 0
+    },
+    {
+        "id": "py_desk_7",
+        "category": "Desktop Applications",
+        "language": "Python",
+        "difficulty": "advanced",
+        "text": "What is 'Flet'?",
+        "options": [
+            "Framework for interactive apps focusing on simplicity",
+            "A type of bird",
+            "A database engine",
+            "A file compression tool"
+        ],
+        "correctIndex": 0
+    }
+]

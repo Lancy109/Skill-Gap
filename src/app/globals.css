@@ -131,3 +131,23 @@
 .btn-primary {
   @apply bg-blue-600 text-white py-2 rounded hover:bg-blue-700;
 }
+
+@layer components {
+  /* Bars in dashboard chart use utility classes for discrete percentage heights (to avoid inline styles) */
+  .bar-current { height: 0%; }
+  .bar-target { height: 0%; }
+
+/* Height Percentage Utilities for Skill Comparison Bars */
+.hp-0 { height: 0%; }
+.hp-10 { height: 10%; }
+.hp-20 { height: 20%; }
+.hp-30 { height: 30%; }
+.hp-40 { height: 40%; }
+.hp-50 { height: 50%; }
+.hp-60 { height: 60%; }
+.hp-70 { height: 70%; }
+.hp-80 { height: 80%; }
+.hp-90 { height: 90%; }
+.hp-100 { height: 100%; 
+}
+}

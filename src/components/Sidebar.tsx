@@ -1,33 +1,72 @@
+"use client";
 import React from 'react';
-import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { LayoutDashboard, BookOpen, Pencil, History, Settings, LogOut } from 'lucide-react';
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useClerk } from "@clerk/nextjs"; // Import Clerk hook
 
-export default function Sidebar() {
+const Sidebar = ({ isCollapsed }) => {
+  const pathname = usePathname();
+  const router = useRouter();
+  const { signOut } = useClerk(); // Initialize signOut function
+
   const menuItems = [
-    { name: 'Dashboard', href: '/dashboard', icon: '🏠' },
-    { name: 'Skill Analysis', href: '/skill-input', icon: '🎯' },
-    { name: 'Recommendations', href: '/recommendations', icon: '💡' },
-    { name: 'Video Summaries', href: '/video-summary', icon: '🎥' },
-    { name: 'Settings', href: '/setting', icon: '⚙️' },
+    { icon: <LayoutDashboard size={20}/>, label: "Dashboard", href: "/dashboard" },
+    { icon: <BookOpen size={20}/>, label: "Browse", href: "/browse" },
+    { icon: <Pencil size={20}/>, label: "Creator", href: "/creator" },
+    { icon: <History size={20}/>, label: "History", href: "/history" },
   ];
 
+  const handleLogout = async () => {
+    // This logs the user out and redirects them to the home page or sign-in page
+    await signOut(() => router.push("/")); 
+  };
+
   return (
-    <aside className="w-64 h-screen bg-white border-r border-slate-100 p-6 flex flex-col fixed left-0 top-0">
-      <div className="text-2xl font-bold text-indigo-600 mb-10 flex items-center gap-2">
-        <div className="w-8 h-8 bg-indigo-600 rounded-lg"></div> Skill Gap
-      </div>
-      <nav className="flex-1 space-y-2">
+    <motion.aside 
+      initial={false}
+      animate={{ width: isCollapsed ? 70 : 240 }}
+      className="border-r border-slate-100 bg-white flex flex-col pt-6 overflow-hidden shrink-0"
+    >
+      <div className="px-3 space-y-1">
         {menuItems.map((item) => (
-          <Link key={item.name} href={item.href} 
-            className="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl transition-all font-medium">
-            <span>{item.icon}</span> {item.name}
+          <Link key={item.href} href={item.href} passHref className="block">
+            <NavItem 
+              icon={item.icon} 
+              label={item.label} 
+              active={pathname === item.href} 
+              collapsed={isCollapsed} 
+            />
           </Link>
         ))}
-      </nav>
-      <div className="mt-auto p-4 bg-slate-50 rounded-2xl">
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Pro Plan</p>
-        <p className="text-sm text-slate-600 mb-3">Get unlimited AI summaries</p>
-        <button className="w-full py-2 bg-indigo-600 text-white text-xs rounded-lg font-bold">Upgrade</button>
       </div>
-    </aside>
+      
+      <div className="mt-auto px-3 pb-6 space-y-1 border-t border-slate-50 pt-4">
+         <NavItem icon={<Settings size={20}/>} label="Settings" collapsed={isCollapsed} />
+         {/* Logout Button linked to Clerk */}
+         <div onClick={handleLogout}>
+           <NavItem 
+            icon={<LogOut size={20}/>} 
+            label="Logout" 
+            collapsed={isCollapsed} 
+            isLogout // Passing a prop to apply hover styles
+          />
+         </div>
+      </div>
+    </motion.aside>
   );
-}
+};
+
+// Internal NavItem helper
+const NavItem = ({ icon, label, active, collapsed, isLogout }) => (
+  <div className={`relative w-full flex items-center transition-all duration-200 rounded-xl font-bold text-sm h-11 cursor-pointer
+    ${active ? "text-indigo-600 bg-indigo-50/50" : "text-slate-400 hover:bg-slate-50 hover:text-slate-600"}
+    ${isLogout ? "hover:text-red-600 hover:bg-red-50" : ""} // Added red hover for logout
+    `}>
+    <div className="flex items-center justify-center w-[7px] pr-6.5 min-w-[70px] shrink-0">{icon}</div>
+    {!collapsed && <span className="tracking-tight whitespace-nowrap">{label}</span>}
+  </div>
+);  
+
+export default Sidebar;
