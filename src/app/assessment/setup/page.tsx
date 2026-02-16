@@ -3,7 +3,6 @@ import React, { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Layout, Database, Smartphone, Cpu, Brain, ArrowRight, Check } from 'lucide-react';
-import Navbar from '@/components/Navbar';
 
 function AssessmentSetupContent() {
     const router = useRouter();
@@ -131,7 +130,6 @@ function AssessmentSetupContent() {
 const AssessmentSetupPage = () => {
     return (
         <div className="min-h-screen bg-[#F8FAFC] flex flex-col text-slate-700 font-sans">
-            <Navbar onToggleNav={() => { }} />
             <Suspense fallback={<div className="flex-1 flex items-center justify-center">Loading...</div>}>
                 <AssessmentSetupContent />
             </Suspense>

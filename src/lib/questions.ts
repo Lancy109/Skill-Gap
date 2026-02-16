@@ -1,14 +1,5 @@
-export type Difficulty = 'conceptual' | 'applied' | 'advanced';
-
-export interface Question {
-    id: string;
-    language: string;
-    difficulty: Difficulty;
-    points: number;
-    text: string;
-    options: string[];
-    correctIndex: number;
-}
+import type { Question, Difficulty } from './types';
+export type { Difficulty }; // Re-export if needed, or just let consumers import from types
 
 export const questions: Question[] = [
     // --- FRONTEND ---

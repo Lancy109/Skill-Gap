@@ -83,10 +83,22 @@ model youtubers {
 }
 
 model UserProgress {
-  id          String   @id @default(cuid())
-  userId      String   @unique
-  activeSkill String?
-  skills      Json     @default("{}")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                      String   @id @default(cuid())
+  userId                  String   @unique
+  name                    String?
+  email                   String?
+  bio                     String?
+  designation             String?
+  age                     Int?
+  activeSkill             String?
+  skills                  Json     @default("{}")
+  watchedLectures         Json     @default("{}") // lectureId -> watchPercentage
+  lectureCompletion       Json     @default("{}") // lectureId -> completed boolean
+  moduleCompletion        Json     @default("{}") // moduleId -> { percentage, completed }
+  courseCompletion        Json     @default("{}") // courseId -> { percentage, completed }
+  lastActivity            Json     @default("{}") // { lectureId, resumeTimestamp, ... }
+  recommendedLearningPath Json     @default("[]") // ordered list of next modules/skills
+  recommendedLanguages    Json     @default("[]") // list of recommended languages/technologies
+  widgetState             Json     @default("{}") // dashboard widget preferences
+  updatedAt               DateTime @updatedAt
 }

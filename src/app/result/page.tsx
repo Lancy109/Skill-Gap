@@ -7,7 +7,6 @@ import { RotateCw, BookOpen, CheckCircle, ArrowRight } from 'lucide-react';
 import { calculateScore, calculateRating } from '@/lib/skillEngine';
 import { questions as allQuestions } from '@/lib/questions';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
 
 function ResultContent() {
     const searchParams = useSearchParams();
@@ -40,8 +39,8 @@ function ResultContent() {
     const ringColor = result.rating >= 8 ? 'stroke-emerald-500' : result.rating >= 5 ? 'stroke-amber-500' : 'stroke-red-500';
 
     return (
-        <div className="flex-1 overflow-y-auto p-6 flex flex-col items-center">
-            <div className="max-w-2xl w-full space-y-8">
+        <div className="flex-1 overflow-y-auto p-6 md:p-8">
+            <div className="max-w-2xl mx-auto space-y-8">
 
                 {/* Score Card */}
                 <motion.div
@@ -98,9 +97,9 @@ function ResultContent() {
                             <RotateCw size={16} /> Retake
                         </button>
                         <button
-                            onClick={() => router.push('/dashboard')}
+                            onClick={() => router.push('/profile-setup')}
                             className="px-6 py-3 bg-indigo-600 text-white font-bold rounded-xl text-sm hover:bg-indigo-700 flex items-center gap-2 transition-colors shadow-lg shadow-indigo-200">
-                            Dashboard <ArrowRight size={16} />
+                            Create Profile <ArrowRight size={16} />
                         </button>
                     </div>
                 </motion.div>
@@ -144,7 +143,7 @@ function ResultContent() {
     );
 }
 
-const RoadmapItem = ({ title, desc }) => (
+const RoadmapItem = ({ title, desc }: { title: string; desc: string }) => (
     <div className="flex gap-6 relative z-10 group">
         <div className="w-8 h-8 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center shrink-0 group-hover:border-indigo-500 group-hover:bg-indigo-50 transition-colors">
             <div className="w-2 h-2 rounded-full bg-slate-300 group-hover:bg-indigo-600 transition-colors" />
@@ -160,8 +159,7 @@ const RoadmapItem = ({ title, desc }) => (
 const ResultPage = () => {
     return (
         <div className="min-h-screen bg-[#F8FAFC] flex flex-col text-slate-700 font-sans">
-            <Navbar onToggleNav={() => { }} />
-            <Suspense fallback={<div>Calculating...</div>}>
+            <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Calculating...</div>}>
                 <ResultContent />
             </Suspense>
         </div>

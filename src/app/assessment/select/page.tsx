@@ -21,7 +21,7 @@ export default function SelectionPage() {
         }
     }, [currentLevel, router]);
 
-    const domains = [
+    const domains: { id: Category; icon: any; color: string }[] = [
         { id: 'Frontend', icon: Layout, color: 'bg-blue-500' },
         { id: 'Backend', icon: Server, color: 'bg-green-500' },
         { id: 'Mobile', icon: Smartphone, color: 'bg-purple-500' },
@@ -108,8 +108,8 @@ export default function SelectionPage() {
                                     whileTap={{ scale: 0.99 }}
                                     onClick={() => handleDomainSelect(domain.id)}
                                     className={`w-full flex items-center p-4 rounded-xl border transition-all ${selectedDomain === domain.id
-                                            ? 'bg-white border-indigo-600 shadow-lg shadow-indigo-50 ring-1 ring-indigo-600'
-                                            : 'bg-white border-slate-100 hover:border-slate-200 hover:shadow-md'
+                                        ? 'bg-white border-indigo-600 shadow-lg shadow-indigo-50 ring-1 ring-indigo-600'
+                                        : 'bg-white border-slate-100 hover:border-slate-200 hover:shadow-md'
                                         }`}
                                 >
                                     <div className={`w-10 h-10 rounded-lg ${domain.color} text-white flex items-center justify-center mr-4 shadow-sm`}>
@@ -161,8 +161,8 @@ export default function SelectionPage() {
                                                     key={tech}
                                                     onClick={() => handleTechSelect(tech)}
                                                     className={`p-4 rounded-xl text-sm font-bold transition-all ${selectedTech === tech
-                                                            ? 'bg-white shadow-md text-indigo-600 ring-2 ring-indigo-600 ring-offset-2 ring-offset-slate-50'
-                                                            : 'bg-white shadow-sm text-slate-600 hover:text-slate-900 hover:shadow-md'
+                                                        ? 'bg-white shadow-md text-indigo-600 ring-2 ring-indigo-600 ring-offset-2 ring-offset-slate-50'
+                                                        : 'bg-white shadow-sm text-slate-600 hover:text-slate-900 hover:shadow-md'
                                                         }`}
                                                 >
                                                     {tech}

@@ -1,16 +1,11 @@
-import type { Metadata } from "next";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+"use client"; // <--- Essential for Sidebar state
+
+import React from "react";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-<html lang="en" suppressHydrationWarning></html>
+// Import your UI Components 
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,28 +17,31 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Skill Gap",
-  description: "Identify and close your skill gaps",
-};
+// Note: 'export const metadata' is removed because this is now a Client Component.
+// We add <title> and <meta> tags inside the <head> below instead.
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
+
+
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} bg-black text-white antialiased`}
-        >
-          
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <title>Skill Gap</title>
+          <meta name="description" content="Identify and close your skill gaps" />
+        </head>
 
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#FDFDFE] text-slate-900`}
+        >
           {children}
         </body>
       </html>
     </ClerkProvider>
   );
 }
-

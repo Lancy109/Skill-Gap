@@ -1,4 +1,5 @@
 import type { Question } from './types';
+export type { Question };
 import questionsData from '@/data/questions.json';
 
 export interface ShuffledQuestion extends Omit<Question, 'correctIndex'> {

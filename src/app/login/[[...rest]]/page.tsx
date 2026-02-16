@@ -1,6 +1,42 @@
+"use client";
+
+import { useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { SignIn } from "@clerk/nextjs";
 
 export default function Page() {
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
+
+  // If user just authenticated via Google but is new, redirect to profile setup
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    if (user) {
+      const hasProfile = user.publicMetadata?.profileSetup === true;
+
+      if (!hasProfile) {
+        // New user from Google login → send to profile creation
+        router.replace("/skill-input");
+      } else {
+        // Existing user → go to dashboard
+        router.replace("/dashboard");
+      }
+    }
+  }, [user, isLoaded, router]);
+
+  // Show loading state while checking
+  if (isLoaded && user) {
+    return (
+      <div className="relative flex items-center justify-center min-h-screen bg-[#F8FAFC]">
+        <div className="text-center">
+          <p className="text-slate-500">Redirecting...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-[#F8FAFC] overflow-hidden">
       {/* Decorative Background Elements to match your "Browse" UI */}
@@ -14,11 +50,12 @@ export default function Page() {
             Welcome Back
           </h1>
           <p className="text-sm text-slate-500 font-medium">
-            Continue your journey to master new skills.
+            Sign in with your existing account.
           </p>
         </div>
 
         <SignIn 
+          signUpUrl="/register"
           appearance={{
             elements: {
               formButtonPrimary: 

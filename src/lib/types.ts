@@ -8,12 +8,13 @@ export type Difficulty = 'conceptual' | 'applied' | 'advanced';
 
 export interface Question {
   id: string;
-  category: string;
+  category?: string;
   language: string;
   difficulty: Difficulty;
   text: string;
   options: string[];
   correctIndex: number;
+  points?: number;
 }
 
 export interface ShuffledQuestion extends Omit<Question, 'correctIndex'> {
@@ -48,3 +49,39 @@ export interface RoadmapItem {
 }
 
 export type RoadmapData = Record<string, RoadmapItem[]>;
+
+// --- User progress/dashboard types ---
+
+export interface LectureProgress {
+  videoId: string;
+  title?: string;           // useful for quick display
+  position?: number;        // resume position in seconds (optional)
+  watchedAt: string;        // ISO timestamp
+}
+
+export interface SkillProgressEntry {
+  watched: string[];        // list of completed video ids
+  total: number;
+  updatedAt?: string;
+  lastWatched?: {
+    videoId: string;
+    title?: string;
+    position?: number;
+    timestamp: string;
+  };
+  history?: LectureProgress[];
+}
+
+export type UserSkillsProgress = Record<string, SkillProgressEntry>;
+
+export interface UserProfileData {
+  userId: string;
+  name?: string;
+  email?: string;
+  bio?: string;
+  designation?: string;
+  age?: number;
+  activeSkill?: string;
+  skills: UserSkillsProgress;
+}
+
