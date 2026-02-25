@@ -247,7 +247,7 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
                                         <div className="lg:col-span-3 h-full bg-slate-50">
                                             <iframe
                                                 width="100%" height="100%"
-                                                src={activeVideoId ? `https://www.youtube.com/embed/${activeVideoId}?list=${activePlaylistId}&autoplay=1&rel=0${resumePosition ? `&start=${resumePosition}` : ''}` : ""}
+                                                src={activeVideoId ? `https://www.youtube.com/embed/${activeVideoId}?list=${activePlaylistId}&autoplay=1&rel=0${resumePosition ? `&start=${resumePosition}` : ''}` : undefined}
                                                 title="Course Player" frameBorder="0" allowFullScreen className="w-full h-full"
                                             ></iframe>
                                         </div>

@@ -3,6 +3,8 @@
 import React from 'react';
 import { X, Sparkles, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface SummaryModalProps {
   isOpen: boolean;
@@ -36,8 +38,7 @@ export default function SummaryModal({ isOpen, onClose, isLoading, summary }: Su
                     <Sparkles size={20} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-slate-900">AI Breakdown</h3>
-                    <p className="text-xs text-slate-500 font-medium">Powered by Gemini 1.5</p>
+                    <h3 className="font-bold text-slate-900">AI Summary</h3>
                   </div>
                 </div>
                 <button onClick={onClose} className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-600 transition-all">
@@ -55,10 +56,10 @@ export default function SummaryModal({ isOpen, onClose, isLoading, summary }: Su
                     </div>
                   </div>
                 ) : (
-                  <div className="prose prose-sm prose-slate max-w-none">
-                    <div className="whitespace-pre-wrap leading-relaxed text-slate-600">
+                  <div className="prose prose-slate prose-sm max-w-none text-slate-600 prose-headings:text-slate-900 prose-a:text-indigo-600 prose-strong:text-slate-900 leading-relaxed">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {summary}
-                    </div>
+                    </ReactMarkdown>
                   </div>
                 )}
               </div>

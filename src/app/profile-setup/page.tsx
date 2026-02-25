@@ -12,7 +12,7 @@ function ProfileSetupContent() {
   const searchParams = useSearchParams();
   const { user, isLoaded } = useUser();
 
-  const selectedSkill = searchParams.get('skill') || "Selected Course";
+  const selectedSkill = searchParams.get('skill');
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -21,7 +21,7 @@ function ProfileSetupContent() {
     designation: '',
     age: '',
     bio: '',
-    activeSkill: selectedSkill
+    activeSkill: selectedSkill || ''
   });
 
   // 1. Auto-fill Clerk data once authenticated session is active
@@ -41,13 +41,18 @@ function ProfileSetupContent() {
     if (!user) return;
     setLoading(true);
     try {
-      // Logic to initialize the skills object with the selected skill
-      const payload = {
+      // Logic to initialize the skills object optionally with the selected skill
+      const payload: any = {
         ...formData,
-        skills: {
-          [selectedSkill]: { watched: [], total: 10 }
-        }
+        skills: {}
       };
+
+      if (selectedSkill) {
+        payload.skills[selectedSkill] = { watched: [], total: 10 };
+        payload.activeSkill = selectedSkill;
+      } else {
+        payload.activeSkill = null;
+      }
 
       await updateUserProfile(user.id, payload);
 
@@ -60,7 +65,9 @@ function ProfileSetupContent() {
       }
 
       // Force refresh the storage for the dashboard and redirect
-      localStorage.setItem(`current-open-skill-${user.id}`, selectedSkill);
+      if (selectedSkill) {
+        localStorage.setItem(`current-open-skill-${user.id}`, selectedSkill);
+      }
       window.dispatchEvent(new Event("storageProgressUpdate"));
 
       router.push('/dashboard');

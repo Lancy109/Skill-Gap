@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Play, Award, Zap, TrendingUp, BookOpen,
-  CheckCircle2, Lock, ArrowRight, BarChart
+  CheckCircle2, Lock, ArrowRight, BarChart, ChevronDown, ChevronUp
 } from 'lucide-react';
 import Link from 'next/link';
 import { useUser } from '@clerk/nextjs';
@@ -25,11 +25,7 @@ interface DashboardData {
   analytics: {
     timeSpent: number[];
     streak: number;
-    comparison: {
-      user: number;
-      market: number;
-      trackAvg: number;
-    };
+    comparison: Array<{ name: string; user: number; market: number }>;
   };
   widgetState: any;
 }
@@ -38,6 +34,7 @@ export default function Dashboard() {
   const { user, isLoaded } = useUser();
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<DashboardData | null>(null);
+  const [showAllSkills, setShowAllSkills] = useState(false);
 
   // Initial Load
   useEffect(() => {
@@ -73,19 +70,22 @@ export default function Dashboard() {
   // Ensure we rely on truthy check that handles null/undefined/empty string correctly
   const hasActivity = data && (
     (data.progress.lecturesCompleted > 0) ||
-    (data.userProfile.activeSkill && data.userProfile.activeSkill.length > 0)
+    (data.progress.skills && Object.keys(data.progress.skills).length > 0)
   );
 
+  const activeSkills = data?.progress.skills ? Object.entries(data.progress.skills) : [];
   const activeSkillName = data?.userProfile.activeSkill || "Select a Track";
-  const activeSkillData = data?.progress.skills[activeSkillName];
-  const activeSkillProgress = activeSkillData && activeSkillData.total > 0
-    ? Math.round((activeSkillData.watched.length / activeSkillData.total) * 100)
-    : 0;
+
+  const visibleSkills = showAllSkills ? activeSkills : activeSkills.slice(0, 3);
+  const hiddenSkillsCount = activeSkills.length - 3;
+
+  const comparisonData = Array.isArray(data?.analytics?.comparison) ? data.analytics.comparison : [];
+  const visibleComparison = showAllSkills ? comparisonData : comparisonData.slice(0, 3);
 
   // Debug Log
   useEffect(() => {
     if (data) {
-      console.log("Derived State -> HasActivity:", hasActivity, "ActiveSkill:", data.userProfile.activeSkill);
+      console.log("Derived State -> HasActivity:", hasActivity, "ActiveSkills:", activeSkills);
     }
   }, [data, hasActivity]);
 
@@ -101,145 +101,183 @@ export default function Dashboard() {
   // Blank State (New User)
   if (!hasActivity) {
     return (
-        <div className="flex flex-1 items-center justify-center text-center p-6 bg-[#F8FAFC] h-full">
-          <div className="bg-white p-12 rounded-3xl shadow-sm border border-slate-100 max-w-md w-full">
-            <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-500">
-              <Play size={32} fill="currentColor" />
-            </div>
-            <h1 className="text-2xl font-bold text-slate-900 mb-2">Welcome, {user?.firstName}!</h1>
-            <p className="text-slate-500 mb-8">Ready to bridge the skill gap? Choose a track to start building your personalized learning journey.</p>
-            <Link href="/browse" className="inline-block w-full bg-orange-500 text-white px-6 py-4 rounded-xl font-bold hover:bg-orange-600 transition shadow-lg shadow-orange-200">
-              Start Your Journey [DEBUG]
-            </Link>
+      <div className="flex flex-1 items-center justify-center text-center p-6 bg-[#F8FAFC] h-full">
+        <div className="bg-white p-12 rounded-3xl shadow-sm border border-slate-100 max-w-md w-full">
+          <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6 text-indigo-500">
+            <Play size={32} fill="currentColor" />
           </div>
+          <h1 className="text-2xl font-bold text-slate-900 mb-2">Welcome, {user?.firstName}!</h1>
+          <p className="text-slate-500 mb-8">Ready to bridge the skill gap? Choose a track to start building your personalized learning journey.</p>
+          <Link href="/browse" className="inline-block w-full bg-indigo-600 text-white px-6 py-4 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">
+            Start Learning
+          </Link>
         </div>
-
+      </div>
     );
   }
 
   // Main Dashboard UI
   return (
 
-      <div className="flex flex-1 overflow-hidden h-full">
-        <main className="flex-1 overflow-y-auto p-6 md:p-10">
-          <div className="max-w-6xl mx-auto space-y-8">
+    <div className="flex flex-1 overflow-hidden h-full">
+      <main className="flex-1 overflow-y-auto p-6 md:p-10">
+        <div className="max-w-6xl mx-auto space-y-8">
 
-            {/* 1. Header Section */}
-            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <h1 className="text-3xl font-bold text-slate-900">Dashboard <span className="text-xs text-slate-300">v3.0</span></h1>
-              <p className="text-slate-500 mt-1">
-                Current Focus: <span className="font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">{activeSkillName}</span>
-              </p>
-              {/* Removed Metrics as requested */}
-            </header>
+          {/* 1. Header Section */}
+          <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
+          </header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-              {/* 2. Active Track Progress (Large Card) */}
-              <div className="lg:col-span-2 bg-white rounded-3xl p-8 border border-slate-100 shadow-sm relative overflow-hidden group hover:border-indigo-100 transition-all">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                <div className="relative z-10">
-                  <div className="flex justify-between items-start mb-6">
-                    <div>
-                      <div className="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-1">In Progress</div>
-                      <h2 className="text-2xl font-black text-slate-900">{activeSkillName} Mastery</h2>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-4xl font-black text-slate-900">{activeSkillProgress}%</span>
-                    </div>
-                  </div>
+            {/* 2. In Progress Skills (Loop over all active skills) */}
+            <div className="lg:col-span-2 space-y-6">
+              <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <Zap size={20} className="text-indigo-500" /> In Progress
+              </h2>
 
-                  {/* Progress Bar */}
-                  <div className="h-4 w-full bg-slate-100 rounded-full overflow-hidden mb-6">
-                    <div
-                      className="h-full bg-indigo-600 rounded-full transition-all duration-1000 ease-out"
-                      style={{ width: `${activeSkillProgress}%` }}
-                    />
-                  </div>
-
-                  <div className="flex gap-4 mt-8">
-                    <Link
-                      href={`/browse?skill=${encodeURIComponent(activeSkillName)}`}
-                      className="bg-slate-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg flex items-center gap-2"
-                    >
-                      <Play size={18} fill="currentColor" /> Resume Learning
-                    </Link>
-                  </div>
+              {activeSkills.length === 0 && (
+                <div className="p-8 bg-white rounded-3xl border border-slate-100 text-center text-slate-400">
+                  No courses in progress.
                 </div>
-              </div>
+              )}
 
-              {/* 3. Skill Gap Analysis (Improved Graph) */}
-              <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col hover:border-indigo-100 transition-all">
-                <div className="mb-6">
-                  <h3 className="font-bold text-slate-900 flex items-center gap-2">
-                    <BarChart size={20} className="text-indigo-500" />
-                    Skill Gap Analysis
-                  </h3>
-                  <p className="text-xs text-slate-400 mt-1">You vs Market Requirements</p>
-                </div>
+              {visibleSkills.map(([skillName, skillData]: [string, any]) => {
+                const progress = skillData.total > 0 ? Math.round((skillData.watched.length / skillData.total) * 100) : 0;
+                return (
+                  <div key={skillName} className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm relative overflow-hidden flex flex-col hover:border-indigo-100 transition-all group">
+                    <div className="flex justify-between items-center mb-4">
+                      <div>
+                        <h3 className="text-xl font-black text-slate-900">{skillName}</h3>
+                        <p className="text-sm text-slate-500">{skillData.watched.length} / {skillData.total} Lectures</p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-3xl font-black text-slate-900">{progress}%</span>
+                      </div>
+                    </div>
 
-                <div className="flex-1 flex flex-col justify-end gap-3 px-2">
-                  {/* Market Bar (Horizontal) */}
-                  <div className="space-y-1">
-                    <div className="flex justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                      <span>Market Goal</span>
-                      <span>100%</span>
-                    </div>
-                    <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden relative">
-                      <div className="absolute inset-y-0 left-0 bg-slate-300 w-full" />
-                    </div>
-                  </div>
-
-                  {/* User Bar (Horizontal) */}
-                  <div className="space-y-1">
-                    <div className="flex justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                      <span>Your Progress</span>
-                      <span className="text-indigo-600">{Math.round(data?.analytics.comparison.user || 0)}%</span>
-                    </div>
-                    <div className="h-4 w-full bg-slate-100 rounded-full overflow-hidden relative">
+                    {/* Progress Bar */}
+                    <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden mb-6">
                       <div
-                        className="absolute inset-y-0 left-0 bg-indigo-600 rounded-full transition-all duration-1000"
-                        style={{ width: `${data?.analytics.comparison.user}%` }}
+                        className="h-full bg-indigo-600 rounded-full transition-all duration-1000 ease-out"
+                        style={{ width: `${progress}%` }}
                       />
                     </div>
-                  </div>
 
-                  <div className="mt-4 p-3 bg-slate-50 rounded-xl text-center">
-                    <p className="text-xs text-slate-500 font-medium">
-                      You need <span className="font-bold text-indigo-600">{100 - (data?.analytics.comparison.user || 0)}%</span> more to reach market readiness.
-                    </p>
+                    <div className="flex justify-end mt-auto">
+                      <Link
+                        href={`/browse?skill=${encodeURIComponent(skillName)}`}
+                        className="text-sm font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 transition-colors"
+                      >
+                        Continue Learning <ArrowRight size={16} />
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              </div>
-
+                );
+              })}
             </div>
 
-            {/* 4. Recommendations Row (Strictly Filtered) */}
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold text-slate-900">Recommended Next Steps</h3>
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">Based on {activeSkillName}</div>
+            {/* 3. Skill Gap Analysis (Multi-Bar Graph) */}
+            <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex flex-col hover:border-indigo-100 transition-all">
+              <div className="mb-6">
+                <h3 className="font-bold text-slate-900 flex items-center gap-2">
+                  <BarChart size={20} className="text-indigo-500" />
+                  Skill Gap Analysis
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">Your Progress vs Market (100%)</p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {data?.recommendations.map((rec, i) => (
-                  <Link key={i} href={`/browse?skill=${encodeURIComponent(rec.title)}`} className="block">
-                    <div className="h-full bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all group cursor-pointer">
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl group-hover:scale-110 transition-transform">
-                          <BookOpen size={20} />
-                        </div>
-                        <span className="text-[10px] font-black uppercase tracking-widest bg-slate-100 text-slate-500 px-2 py-1 rounded-full">{rec.priority}</span>
+
+              <div className="flex-1 flex flex-col gap-6">
+                {visibleComparison.map((item, index) => (
+                  <div key={index} className="space-y-4 border-b border-slate-50 pb-6 last:border-0">
+                    <h4 className="font-bold text-slate-800">{item.name}</h4>
+
+                    {/* User Progress Bar */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-[11px] font-bold text-slate-500 uppercase tracking-wide">
+                        <span>Your Progress</span>
+                        <span className="text-indigo-600">{item.user}%</span>
                       </div>
-                      <h4 className="font-bold text-lg text-slate-900 mb-1">{rec.title}</h4>
-                      <p className="text-sm text-slate-500 font-medium">{rec.type}</p>
+                      <div className="h-4 w-full bg-slate-100 rounded-full overflow-hidden relative">
+                        <div
+                          className="absolute inset-y-0 left-0 bg-indigo-500 rounded-full transition-all duration-1000"
+                          style={{ width: `${item.user}%` }}
+                        />
+                      </div>
                     </div>
-                  </Link>
+
+                    {/* Market Requirement Bar */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-[11px] font-bold text-slate-500 uppercase tracking-wide">
+                        <span>Market Requirement</span>
+                        <span className="text-emerald-500">100%</span>
+                      </div>
+                      <div className="h-4 w-full bg-slate-100 rounded-full overflow-hidden relative">
+                        <div
+                          className="absolute inset-y-0 left-0 bg-emerald-400 rounded-full transition-all duration-1000"
+                          style={{ width: `100%` }}
+                        />
+                      </div>
+                    </div>
+
+                  </div>
                 ))}
+
+                {comparisonData.length === 0 && (
+                  <p className="text-center text-slate-400 text-sm py-10">Start learning to see analysis.</p>
+                )}
               </div>
             </div>
 
           </div>
-        </main>
-      </div >
+
+          {/* Global Toggle Button */}
+          {hiddenSkillsCount > 0 && (
+            <div className="flex justify-center mt-4 mb-8">
+              {!showAllSkills ? (
+                <button
+                  onClick={() => setShowAllSkills(true)}
+                  className="w-full max-w-md py-4 flex items-center justify-center gap-2 text-sm font-bold text-indigo-600 bg-white border border-indigo-100 shadow-sm hover:bg-indigo-50 hover:border-indigo-200 rounded-2xl transition-all"
+                >
+                  View {hiddenSkillsCount} More Courses <ChevronDown size={16} />
+                </button>
+              ) : (
+                <button
+                  onClick={() => setShowAllSkills(false)}
+                  className="w-full max-w-md py-4 flex items-center justify-center gap-2 text-sm font-bold text-slate-500 bg-white border border-slate-200 shadow-sm hover:bg-slate-50 hover:border-slate-300 rounded-2xl transition-all"
+                >
+                  Show Less <ChevronUp size={16} />
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* 4. Recommendations Row (Strictly Filtered) */}
+          <div>
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-slate-900">Recommended Next Steps</h3>
+              <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">Based on {activeSkillName}</div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {data?.recommendations.map((rec, i) => (
+                <Link key={i} href={`/browse?skill=${encodeURIComponent(rec.title)}`} className="block">
+                  <div className="h-full bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all group cursor-pointer">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl group-hover:scale-110 transition-transform">
+                        <BookOpen size={20} />
+                      </div>
+                      <span className="text-[10px] font-black uppercase tracking-widest bg-slate-100 text-slate-500 px-2 py-1 rounded-full">{rec.priority}</span>
+                    </div>
+                    <h4 className="font-bold text-lg text-slate-900 mb-1">{rec.title}</h4>
+                    <p className="text-sm text-slate-500 font-medium">{rec.type}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div >
   );
 }

@@ -12,8 +12,17 @@ export default async function BrowsePage() {
     dbVideos = await prisma.$queryRawUnsafe('SELECT playlist_id, title, youtube_video_id, position FROM "videos" ORDER BY position ASC') as any[];
   } catch (err) {
     // If the database is unreachable (e.g., local dev or misconfigured env), avoid crashing the page.
-    // Fall back to an empty list so the UI can render and the user can still navigate.
-    console.warn("BrowsePage: database query failed, falling back to empty playlists:", err);
+    // Fall back to mock data so the UI can render and the user can still navigate and test.
+    console.warn("BrowsePage: database query failed, falling back to mock playlists:", err);
+    dbPlaylists = [
+      { id: 'playlist-1', title: 'React for Beginners', playlist_url: 'https://youtube.com/playlist?list=PLmock1' },
+      { id: 'playlist-2', title: 'Python Mastery', playlist_url: 'https://youtube.com/playlist?list=PLmock2' }
+    ];
+    dbVideos = [
+      { playlist_id: 'playlist-1', title: 'Introduction to React', youtube_video_id: 'Ke90Tje7VS0', position: 1 },
+      { playlist_id: 'playlist-1', title: 'React Hooks Explained', youtube_video_id: 'TNhaISOUy6Q', position: 2 },
+      { playlist_id: 'playlist-2', title: 'Python Basics', youtube_video_id: 'vEQ8CXFWLZU', position: 1 }
+    ];
   }
 
   // Attach videos to their respective playlists
