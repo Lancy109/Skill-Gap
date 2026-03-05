@@ -1,6 +1,32 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
+export async function GET(request: Request) {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+
+    if (!userId) {
+        return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
+    }
+
+    try {
+        const userProgress = await prisma.userProgress.findUnique({
+            where: { userId },
+        });
+
+        return NextResponse.json({
+            progress: {
+                skills: userProgress?.skills || {}
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching history data:', error);
+        return NextResponse.json({ error: 'Failed to fetch history data' }, { status: 500 });
+    }
+}
+
 export async function DELETE(request: Request) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
