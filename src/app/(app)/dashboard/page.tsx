@@ -110,7 +110,7 @@ export default function Dashboard() {
           </div>
           <h1 className="text-2xl font-bold text-slate-900 mb-2">Welcome, {user?.firstName}!</h1>
           <p className="text-slate-500 mb-8">Ready to bridge the skill gap? Choose a track to start building your personalized learning journey.</p>
-          <Link href="/browse" className="inline-block w-full bg-indigo-600 text-white px-6 py-4 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">
+          <Link href="/browse" className="inline-block w-full bg-indigo-600 text-white px-6 py-4 rounded-xl font-bold hover:bg-indigo-700 transition">
             Start Learning
           </Link>
         </div>

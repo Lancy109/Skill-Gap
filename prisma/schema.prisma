@@ -91,6 +91,7 @@ model UserProgress {
   designation             String?
   age                     Int?
   activeSkill             String?
+  profileImage            String?
   skills                  Json     @default("{}")
   watchedLectures         Json     @default("{}") // lectureId -> watchPercentage
   lectureCompletion       Json     @default("{}") // lectureId -> completed boolean

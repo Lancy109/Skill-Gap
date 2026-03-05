@@ -65,7 +65,7 @@ const ExpertCard = ({ expert }: { expert: Expert }) => {
         href={expert.link}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-full flex items-center justify-center gap-2 bg-slate-900 text-white py-2.5 rounded-xl text-[11px] font-bold hover:bg-red-600 transition-all shadow-lg shadow-slate-200 hover:shadow-red-200"
+        className="w-full flex items-center justify-center gap-2 bg-slate-900 text-white py-2.5 rounded-xl text-[11px] font-bold hover:bg-red-600 transition-all"
       >
         YouTube Channel <ExternalLink size={12} />
       </a>

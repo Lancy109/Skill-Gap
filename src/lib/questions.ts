@@ -97,6 +97,134 @@ export const questions: Question[] = [
         correctIndex: 0
     },
 
+    // HTML & CSS questions added to ensure scoring matches JSON dataset
+    {
+        id: 'html-fe-1',
+        language: 'HTML',
+        difficulty: 'conceptual',
+        points: 10,
+        text: "What does HTML stand for?",
+        options: ['Hyper Text Markup Language', 'High Tech Modern Language', 'Hyperlink Text Management', 'Home Tool Markup'],
+        correctIndex: 0
+    },
+    {
+        id: 'html-fe-2',
+        language: 'HTML',
+        difficulty: 'conceptual',
+        points: 10,
+        text: "Which tag is used for an unordered list?",
+        options: ['<ol>', '<ul>', '<li>', '<list>'],
+        correctIndex: 1
+    },
+    {
+        id: 'html-fe-3',
+        language: 'HTML',
+        difficulty: 'applied',
+        points: 13,
+        text: "Correct HTML for creating a hyperlink?",
+        options: ['<a>http://google.com</a>', "<a href='http://google.com'>Google</a>", "<a url='http://google.com'>Google</a>", '<link>http://google.com</link>'],
+        correctIndex: 1
+    },
+    {
+        id: 'html-fe-4',
+        language: 'HTML',
+        difficulty: 'applied',
+        points: 13,
+        text: "Which tag is used to define an image?",
+        options: ['<image>', '<img>', '<picture>', '<src>'],
+        correctIndex: 1
+    },
+    {
+        id: 'html-fe-5',
+        language: 'HTML',
+        difficulty: 'applied',
+        points: 13,
+        text: "Which character is used to indicate an end tag?",
+        options: ['*', '<', '/', '^'],
+        correctIndex: 2
+    },
+    {
+        id: 'html-fe-6',
+        language: 'HTML',
+        difficulty: 'advanced',
+        points: 16,
+        text: "What is the purpose of the <canvas> element?",
+        options: ['To display text', 'To draw graphics via scripting (usually JavaScript)', 'To store data', 'To create forms'],
+        correctIndex: 1
+    },
+    {
+        id: 'html-fe-7',
+        language: 'HTML',
+        difficulty: 'advanced',
+        points: 16,
+        text: "Which attribute is used to provide an advisory text about an element?",
+        options: ['title', 'tooltip', 'alt', 'desc'],
+        correctIndex: 0
+    },
+    {
+        id: 'css-fe-1',
+        language: 'CSS',
+        difficulty: 'conceptual',
+        points: 10,
+        text: "What does CSS stand for?",
+        options: ['Creative Style Sheets', 'Cascading Style Sheets', 'Computer Style Sheets', 'Colorful Style Sheets'],
+        correctIndex: 1
+    },
+    {
+        id: 'css-fe-2',
+        language: 'CSS',
+        difficulty: 'conceptual',
+        points: 10,
+        text: "Where in an HTML document is the correct place to refer to an external style sheet?",
+        options: ['In the <body> section', 'At the end of the document', 'In the <head> section', 'In the <footer> section'],
+        correctIndex: 2
+    },
+    {
+        id: 'css-fe-3',
+        language: 'CSS',
+        difficulty: 'applied',
+        points: 13,
+        text: "Which property is used to change the background color?",
+        options: ['color', 'bgcolor', 'background-color', 'fill'],
+        correctIndex: 2
+    },
+    {
+        id: 'css-fe-4',
+        language: 'CSS',
+        difficulty: 'applied',
+        points: 13,
+        text: "Which CSS property controls the text size?",
+        options: ['text-style', 'font-style', 'text-size', 'font-size'],
+        correctIndex: 3
+    },
+    {
+        id: 'css-fe-5',
+        language: 'CSS',
+        difficulty: 'applied',
+        points: 13,
+        text: "How do you display hyperlinks without an underline?",
+        options: ['a {text-decoration:none;}', 'a {underline:none;}', 'a {text-style:no-underline;}', 'a {decoration:no-underline;}'],
+        correctIndex: 0
+    },
+    {
+        id: 'css-fe-6',
+        language: 'CSS',
+        difficulty: 'advanced',
+        points: 16,
+        text: "How do you make the text bold?",
+        options: ['font:bold;', 'font-weight:bold;', 'style:bold;', 'text-decoration:bold;'],
+        correctIndex: 1
+    },
+    {
+        id: 'css-fe-7',
+        language: 'CSS',
+        difficulty: 'advanced',
+        points: 16,
+        text: "Which property is used to change the left margin of an element?",
+        options: ['padding-left', 'margin-left', 'indent', 'spacing-left'],
+        correctIndex: 1
+    },
+
     // --- BACKEND ---
     // Python
     {

@@ -151,3 +151,65 @@
 .hp-100 { height: 100%; 
 }
 }
+
+/* =========================================================
+   DARK MODE OVERRIDES
+   Applied when .dark class is on <html>
+   Overrides common Tailwind utility colours site-wide
+   ========================================================= */
+
+/* Background colours */
+html.dark .bg-white { background-color: oklch(0.18 0 0) !important; }
+html.dark .bg-\[\#F8FAFC\] { background-color: oklch(0.13 0 0) !important; }
+html.dark .bg-\[\#FDFDFE\] { background-color: oklch(0.13 0 0) !important; }
+html.dark .bg-slate-50 { background-color: oklch(0.2 0 0) !important; }
+html.dark .bg-slate-100 { background-color: oklch(0.23 0 0) !important; }
+html.dark .bg-slate-200 { background-color: oklch(0.28 0 0) !important; }
+html.dark .bg-indigo-50 { background-color: oklch(0.25 0.04 264) !important; }
+
+/* Text colours */
+html.dark .text-slate-900 { color: oklch(0.97 0 0) !important; }
+html.dark .text-slate-800 { color: oklch(0.93 0 0) !important; }
+html.dark .text-slate-700 { color: oklch(0.87 0 0) !important; }
+html.dark .text-slate-600 { color: oklch(0.78 0 0) !important; }
+html.dark .text-slate-500 { color: oklch(0.67 0 0) !important; }
+html.dark .text-slate-400 { color: oklch(0.58 0 0) !important; }
+
+/* Border colours */
+html.dark .border-slate-50 { border-color: oklch(0.22 0 0) !important; }
+html.dark .border-slate-100 { border-color: oklch(0.26 0 0) !important; }
+html.dark .border-slate-200 { border-color: oklch(0.32 0 0) !important; }
+
+/* Hover states */
+html.dark .hover\:bg-slate-50:hover { background-color: oklch(0.22 0 0) !important; }
+html.dark .hover\:bg-slate-100:hover { background-color: oklch(0.26 0 0) !important; }
+
+/* Input/select/textarea */
+html.dark input:not([type="range"]):not([type="checkbox"]):not([type="file"]),
+html.dark select,
+html.dark textarea {
+  background-color: oklch(0.22 0 0) !important;
+  color: oklch(0.93 0 0) !important;
+  border-color: oklch(0.32 0 0) !important;
+}
+
+/* Navbar */
+html.dark nav { background-color: oklch(0.18 0 0 / 0.9) !important; border-color: oklch(0.26 0 0) !important; }
+
+/* Sidebar */
+html.dark aside { background-color: oklch(0.18 0 0) !important; border-color: oklch(0.26 0 0) !important; }
+
+/* Sticky sidebar footer */
+html.dark .bg-white { background-color: oklch(0.18 0 0) !important; }
+
+/* Rounded cards */
+html.dark .rounded-2xl,
+html.dark .rounded-3xl {
+  border-color: oklch(0.26 0 0) !important;
+}
+
+/* Shadow-sm tweak so cards are still visible in dark */
+html.dark .shadow-sm { box-shadow: 0 1px 3px oklch(0 0 0 / 0.5) !important; }
+
+/* Body background */
+html.dark body { background-color: oklch(0.13 0 0) !important; color: oklch(0.93 0 0) !important; }

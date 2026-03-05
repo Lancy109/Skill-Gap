@@ -4,8 +4,10 @@ import React, { Suspense, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { RotateCw, ArrowRight } from 'lucide-react';
-import { calculateScore, calculateRating } from '@/lib/skillEngine';
-import { questions as allQuestions } from '@/lib/questions';
+import { calculateScore, calculateRating, allQuestions } from '@/lib/skillEngine';
+// note: questions are now imported directly from skillEngine JSON data so result calculation
+// always matches the quiz generator. The separate questions.ts file is no longer used here.
+
 
 function ResultContent() {
     const searchParams = useSearchParams();
@@ -19,7 +21,7 @@ function ResultContent() {
 
     // Calculate Score
     const result = useMemo(() => {
-        if (level === 'beginner') return { rating: 1, score: 0, maxScore: 0 };
+        if (level === 'beginner') return { rating: 1, correctCount: 0, totalQuestions: 0 };
 
         try {
             const answers = answersStr ? JSON.parse(answersStr) : {};
@@ -28,9 +30,9 @@ function ResultContent() {
 
             const { totalScore, maxScore } = calculateScore(answers, quizQuestions);
             const rating = calculateRating(totalScore, maxScore);
-            return { rating, score: totalScore, maxScore };
+            return { rating, correctCount: totalScore, totalQuestions: maxScore };
         } catch {
-            return { rating: 1, score: 0, maxScore: 0 };
+            return { rating: 1, correctCount: 0, totalQuestions: 0 };
         }
     }, [answersStr, qIdsStr, level]);
 
@@ -57,7 +59,8 @@ function ResultContent() {
                     <p className="text-slate-500 text-sm mb-8 capitalize">{level} Level</p>
 
                     {level !== 'beginner' ? (
-                        <div className="flex justify-center mb-8">
+                        <>
+                        <div className="flex justify-center mb-4">
                             <div className="relative w-40 h-40 flex items-center justify-center">
                                 {/* SVG Ring */}
                                 <svg className="w-full h-full transform -rotate-90">
@@ -75,6 +78,13 @@ function ResultContent() {
                                 </div>
                             </div>
                         </div>
+                        <div className="text-center mb-8">
+                            <p className="text-2xl font-bold text-slate-900">
+                                {result.correctCount} / {result.totalQuestions}
+                            </p>
+                            <p className="text-sm text-slate-500">Correct Answers</p>
+                        </div>
+                        </>
                     ) : (
                         <div className="mb-8 p-6 bg-indigo-50 rounded-2xl">
                             <h3 className="text-indigo-900 font-bold mb-2">Welcome to your journey!</h3>

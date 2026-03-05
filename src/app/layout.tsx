@@ -34,10 +34,27 @@ export default function RootLayout({
         <head>
           <title>Skill Gap</title>
           <meta name="description" content="Identify and close your skill gaps" />
+          {/* Inline script to apply stored theme before hydration (prevents flash) */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                try {
+                  var s = localStorage.getItem('skill-gap-settings');
+                  if (s) {
+                    var t = JSON.parse(s).theme;
+                    if (t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                      document.documentElement.classList.add('dark');
+                      document.documentElement.style.colorScheme = 'dark';
+                    }
+                  }
+                } catch(e) {}
+              `,
+            }}
+          />
         </head>
 
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#FDFDFE] text-slate-900`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           {children}
         </body>

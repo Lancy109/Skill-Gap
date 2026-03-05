@@ -17,12 +17,19 @@ export const DIFFICULTY_WEIGHTS: Record<string, number> = {
 
 // Get random questions for a language
 export function getRandomQuestions(language: string, count: number, excludeIds: string[] = []): Question[] {
-    // Normalize language for AI/ML or others if needed, assuming direct match for now
-    // For AI/ML, we might map 'Python' to it or have 'AI/ML' as language
-    let langQuestions = (questionsData as Question[]).filter(q => q.language === language);
+    // Handle combined languages like "HTML/CSS"
+    let langQuestions: Question[] = [];
+    
+    if (language.includes('/')) {
+        // Split by / and filter for any matching language
+        const langs = language.split('/').map(l => l.trim());
+        langQuestions = (questionsData as Question[]).filter(q => langs.includes(q.language));
+    } else {
+        // Standard language matching
+        langQuestions = (questionsData as Question[]).filter(q => q.language === language);
+    }
 
     // If not enough questions specific to language (e.g. AI/ML using Python), fallback or just use what we have.
-    // For this demo, assuming we have enough or just return all.
     if (langQuestions.length === 0 && language === 'AI/ML') {
         langQuestions = (questionsData as Question[]).filter(q => q.language === 'Python' || q.language === 'AI/ML');
     }
@@ -60,12 +67,8 @@ export function calculateScore(userAnswers: Record<string, number>, quizQuestion
     let maxScore = 0;
 
     quizQuestions.forEach(q => {
-        // prefer explicit points when available (our question bank now includes them)
-        // fallback to difficulty weight for backward compatibility
-        const pts = typeof q.points === 'number'
-            ? q.points
-            : DIFFICULTY_WEIGHTS[q.difficulty] || 1;
-
+        // Each question is worth 1 point
+        const pts = 1;
         maxScore += pts;
 
         const answerIndex = userAnswers[q.id];
@@ -83,3 +86,6 @@ export function calculateRating(totalScore: number, maxScore: number): number {
     raw = Math.round(raw);
     return Math.max(1, Math.min(10, raw));
 }
+
+// exposed list of all questions (mirrors the JSON data used by the quiz)
+export const allQuestions: Question[] = (questionsData as Question[]);

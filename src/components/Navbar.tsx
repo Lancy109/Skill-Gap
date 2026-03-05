@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useUserProfile } from '@/lib/UserProfileContext';
 
 const AVAILABLE_COURSES = [
   "Python", "C", "Advanced JavaScript", "NodeJS", "Java", "SQL", "Kotlin",
@@ -19,6 +20,7 @@ const MOCK_NOTIFICATIONS = [
 
 const Navbar = ({ onToggleNav }: { onToggleNav: () => void }) => {
   const { user, isLoaded } = useUser();
+  const { profileImageUrl } = useUserProfile();
   const router = useRouter();
 
   const [userLevel, setUserLevel] = useState("NEWBIE"); // Default fallback
@@ -107,12 +109,12 @@ const Navbar = ({ onToggleNav }: { onToggleNav: () => void }) => {
           <Menu size={18} />
         </button>
 
-        <Link href="/dashboard" className="flex items-center gap-2.5 group">
-          <div className="w-7 h-7 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-indigo-200 group-hover:rotate-6 transition-transform">
+        <Link href="/dashboard" className="flex items-center gap-2 group">
+          <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-lg group-hover:bg-indigo-700 transition-colors">
             S
           </div>
-          <span className="font-bold text-slate-900 tracking-tight text-base hidden sm:block">
-            SkillGap
+          <span className="text-xl font-bold text-slate-900 tracking-tight hidden sm:block">
+            Skill <span className="text-indigo-600">Gap</span>
           </span>
         </Link>
       </div>
@@ -249,7 +251,7 @@ const Navbar = ({ onToggleNav }: { onToggleNav: () => void }) => {
         <Link href="/profile" className="flex items-center gap-3 pl-2 pr-1 py-1 hover:bg-slate-50 rounded-xl transition-all border border-transparent hover:border-slate-100 group">
           <div className="w-8 h-8 rounded-lg bg-indigo-100 border border-indigo-200 flex items-center justify-center overflow-hidden">
             <Image
-              src={user?.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userName}`}
+              src={profileImageUrl || user?.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userName}`}
               alt="User"
               width={32}
               height={32}

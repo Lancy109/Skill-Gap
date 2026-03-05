@@ -45,7 +45,7 @@ export default function SelectionPage() {
 
         // For beginner, skip questions
         if (skillLevel === 'beginner') {
-            router.push('/assessment/result');
+            router.push(`/assessment/result?level=${skillLevel}&domain=${selectedDomain}&lang=${selectedTech}`);
             return;
         }
 
@@ -61,7 +61,7 @@ export default function SelectionPage() {
         const preparedQuestions = questions.map(q => shuffleOptions(q));
 
         setQuestions(preparedQuestions);
-        router.push('/assessment/quiz');
+        router.push(`/assessment/quiz?lang=${selectedTech}&domain=${selectedDomain}&level=${skillLevel}`);
     };
 
     const availableTechnologies = selectedDomain ? getLanguagesForCategory(selectedDomain) : [];

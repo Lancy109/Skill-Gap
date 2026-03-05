@@ -28,7 +28,7 @@ export default function HistoryPage() {
       }
 
       try {
-        const response = await fetch(`/api/dashboard?userId=${user.id}`);
+        const response = await fetch(`/api/history?userId=${user.id}`);
         if (!response.ok) throw new Error('Failed to fetch history');
         const json = await response.json();
         setData(json);
