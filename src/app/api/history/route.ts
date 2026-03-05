@@ -18,7 +18,7 @@ export async function DELETE(request: Request) {
             });
 
             if (existingRecord) {
-                const existingSkills = (existingRecord.skills as Record<string, any>) || {};
+                const existingSkills = (existingRecord.skills ?? {}) as Record<string, object>;
 
                 if (existingSkills[skillName]) {
                     delete existingSkills[skillName];

@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, Bell, Menu, ChevronDown, BookOpen, User as UserIcon, Target } from 'lucide-react';
 import Link from "next/link";
+import Image from "next/image";
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -12,7 +13,6 @@ const AVAILABLE_COURSES = [
 ];
 
 const MOCK_NOTIFICATIONS = [
-  { id: 1, title: 'Welcome to SkillGap!', desc: 'Explore courses to start your journey.', time: '2h ago', icon: <UserIcon size={16} />, unread: true },
   { id: 2, title: 'New Playlist Available', desc: 'A new Advanced React playlist was just added.', time: '1d ago', icon: <BookOpen size={16} />, unread: true },
   { id: 3, title: 'Goal Reminder', desc: 'You are close to finishing the Python Basics module.', time: '3d ago', icon: <Target size={16} />, unread: false }
 ];
@@ -46,6 +46,21 @@ const Navbar = ({ onToggleNav }: { onToggleNav: () => void }) => {
             const data = await res.json();
             setUserName(data.name || user.firstName || "User");
             setUserLevel((data.designation || "STUDENT").toUpperCase());
+            // Add a contextual welcome notification for new users
+            const uCreated = user.createdAt ? new Date(user.createdAt) : null;
+            const isNew = uCreated ? (Date.now() - uCreated.getTime()) < 1000 * 60 * 60 * 24 * 3 : false; // 3 days
+            const relative = (date?: Date) => {
+              if (!date) return 'Just now';
+              const diff = Math.floor((Date.now() - date.getTime()) / 1000);
+              if (diff < 60) return 'Just now';
+              if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+              if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+              return `${Math.floor(diff / 86400)}d ago`;
+            };
+
+            if (isNew) {
+              setNotifications(prev => [{ id: 1, title: 'Welcome to SkillGap!', desc: 'Explore courses to start your journey.', time: relative(uCreated || undefined), icon: <UserIcon size={16} />, unread: true }, ...prev]);
+            }
           }
         } catch (e) {
           console.error("Failed to fetch profile for Navbar", e);
@@ -139,7 +154,7 @@ const Navbar = ({ onToggleNav }: { onToggleNav: () => void }) => {
                 ))
               ) : (
                 <div className="px-4 py-3 text-sm text-slate-500 text-center">
-                  No courses found for "{searchQuery}"
+                  No courses found for &quot;{searchQuery}&quot;
                 </div>
               )}
             </motion.div>
@@ -207,7 +222,7 @@ const Navbar = ({ onToggleNav }: { onToggleNav: () => void }) => {
                       <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
                         <Bell size={24} />
                       </div>
-                      <p className="text-sm font-bold text-slate-600 mb-1">You're all caught up!</p>
+                      <p className="text-sm font-bold text-slate-600 mb-1">You&apos;re all caught up!</p>
                       <p className="text-xs text-slate-400">Check back later for new updates.</p>
                     </div>
                   )}
@@ -233,10 +248,13 @@ const Navbar = ({ onToggleNav }: { onToggleNav: () => void }) => {
         {/* DYNAMIC PROFILE TRIGGER */}
         <Link href="/profile" className="flex items-center gap-3 pl-2 pr-1 py-1 hover:bg-slate-50 rounded-xl transition-all border border-transparent hover:border-slate-100 group">
           <div className="w-8 h-8 rounded-lg bg-indigo-100 border border-indigo-200 flex items-center justify-center overflow-hidden">
-            <img
-              src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userName}`}
+            <Image
+              src={user?.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userName}`}
               alt="User"
+              width={32}
+              height={32}
               className="w-full h-full object-cover"
+              unoptimized={true}
             />
           </div>
           <div className="hidden lg:block text-left">

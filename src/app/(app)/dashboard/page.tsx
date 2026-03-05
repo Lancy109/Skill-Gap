@@ -1,12 +1,14 @@
 ﻿"use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
-  Play, Award, Zap, TrendingUp, BookOpen,
-  CheckCircle2, Lock, ArrowRight, BarChart, ChevronDown, ChevronUp
+  Play, Zap, BookOpen,
+  ArrowRight, BarChart, ChevronDown, ChevronUp
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useUser } from '@clerk/nextjs';
+import { getCourseLogo } from '@/lib/courseLogos';
 
 // --- Types ---
 interface DashboardData {
@@ -27,7 +29,7 @@ interface DashboardData {
     streak: number;
     comparison: Array<{ name: string; user: number; market: number }>;
   };
-  widgetState: any;
+  widgetState: Record<string, unknown>;
 }
 
 export default function Dashboard() {
@@ -68,12 +70,12 @@ export default function Dashboard() {
 
   // Derived State
   // Ensure we rely on truthy check that handles null/undefined/empty string correctly
-  const hasActivity = data && (
+  const hasActivity = useMemo(() => data && (
     (data.progress.lecturesCompleted > 0) ||
     (data.progress.skills && Object.keys(data.progress.skills).length > 0)
-  );
+  ), [data]);
 
-  const activeSkills = data?.progress.skills ? Object.entries(data.progress.skills) : [];
+  const activeSkills = useMemo(() => data?.progress.skills ? Object.entries(data.progress.skills) : [], [data]);
   const activeSkillName = data?.userProfile.activeSkill || "Select a Track";
 
   const visibleSkills = showAllSkills ? activeSkills : activeSkills.slice(0, 3);
@@ -87,7 +89,7 @@ export default function Dashboard() {
     if (data) {
       console.log("Derived State -> HasActivity:", hasActivity, "ActiveSkills:", activeSkills);
     }
-  }, [data, hasActivity]);
+  }, [data, hasActivity, activeSkills]);
 
   // Loading State
   if (isLoading || !isLoaded) {
@@ -116,6 +118,69 @@ export default function Dashboard() {
     );
   }
 
+  // Available courses (title + category) used to scope recommendations
+  const AVAILABLE_COURSES = [
+    { title: 'React', category: 'frontend' },
+    { title: 'HTML & CSS', category: 'frontend' },
+    { title: 'JavaScript', category: 'frontend' },
+    { title: 'TypeScript', category: 'frontend' },
+    { title: 'React Native', category: 'mobile' },
+    { title: 'NodeJS', category: 'backend' },
+    { title: 'Python', category: 'backend' },
+    { title: 'Java', category: 'backend' },
+    { title: 'SQL', category: 'backend' },
+    { title: 'C', category: 'systems' },
+    { title: 'C++', category: 'systems' },
+    { title: 'Kotlin', category: 'mobile' },
+    { title: 'Swift', category: 'mobile' },
+    { title: 'Flutter', category: 'mobile' }
+  ];
+
+  const keywordCategory = (name: string) => {
+    if (!name) return null;
+    const k = name.toLowerCase();
+    if (['html', 'css', 'react', 'frontend', 'javascript', 'typescript'].some(x => k.includes(x))) return 'frontend';
+    if (['node', 'python', 'java', 'sql', 'backend', 'server'].some(x => k.includes(x))) return 'backend';
+    if (['kotlin', 'swift', 'flutter', 'mobile', 'react native'].some(x => k.includes(x))) return 'mobile';
+    if (['c++', 'c', 'systems'].some(x => k.includes(x))) return 'systems';
+    return null;
+  };
+
+  // Determine user's dominant watched category
+  const determineTopCategory = () => {
+    const skills = data?.progress?.skills || {};
+    const counts: Record<string, number> = {};
+
+    Object.entries(skills).forEach(([skillName, skillData]) => {
+      const weight = Array.isArray(skillData.watched) ? skillData.watched.length : 1;
+      // try exact match with AVAILABLE_COURSES
+      const matched = AVAILABLE_COURSES.find(c => skillName.toLowerCase().includes(c.title.toLowerCase()));
+      const category = matched ? matched.category : (keywordCategory(skillName) || 'other');
+      counts[category] = (counts[category] || 0) + weight;
+    });
+
+    // pick highest
+    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    return sorted.length > 0 ? sorted[0][0] : null;
+  };
+
+  const filteredRecommendations = (() => {
+    const recs = data?.recommendations || [];
+    const topCategory = determineTopCategory();
+    if (!topCategory) return recs;
+
+    // build set of available course titles in the same category
+    const allowed = AVAILABLE_COURSES.filter(c => c.category === topCategory).map(c => c.title.toLowerCase());
+
+    const filtered = recs.filter(r => {
+      const title = (r.title || '').toLowerCase();
+      // allow if recommendation title matches any allowed course title
+      return allowed.some(a => title.includes(a) || a.includes(title));
+    });
+
+    return filtered.length > 0 ? filtered : recs;
+  })();
+
   // Main Dashboard UI
   return (
 
@@ -142,12 +207,16 @@ export default function Dashboard() {
                 </div>
               )}
 
-              {visibleSkills.map(([skillName, skillData]: [string, any]) => {
+              {visibleSkills.map(([skillName, skillData]: [string, { watched: string[]; total: number }]) => {
                 const progress = skillData.total > 0 ? Math.round((skillData.watched.length / skillData.total) * 100) : 0;
+                const logoInfo = getCourseLogo(skillName);
                 return (
                   <div key={skillName} className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm relative overflow-hidden flex flex-col hover:border-indigo-100 transition-all group">
-                    <div className="flex justify-between items-center mb-4">
-                      <div>
+                    <div className="flex justify-between items-center mb-4 gap-4">
+                      <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: logoInfo.bgColor }}>
+                        <Image src={logoInfo.url} alt={skillName} width={32} height={32} className="w-8 h-8 object-contain" unoptimized={true} />
+                      </div>
+                      <div className="flex-1">
                         <h3 className="text-xl font-black text-slate-900">{skillName}</h3>
                         <p className="text-sm text-slate-500">{skillData.watched.length} / {skillData.total} Lectures</p>
                       </div>
@@ -156,11 +225,11 @@ export default function Dashboard() {
                       </div>
                     </div>
 
-                    {/* Progress Bar */}
+                    {/* Progress Bar with color matching logo */}
                     <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden mb-6">
                       <div
-                        className="h-full bg-indigo-600 rounded-full transition-all duration-1000 ease-out"
-                        style={{ width: `${progress}%` }}
+                        className="h-full rounded-full transition-all duration-1000 ease-out"
+                        style={{ width: `${progress}%`, backgroundColor: logoInfo.bgHex }}
                       />
                     </div>
 
@@ -259,7 +328,7 @@ export default function Dashboard() {
               <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">Based on {activeSkillName}</div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {data?.recommendations.map((rec, i) => (
+              {filteredRecommendations.map((rec, i) => (
                 <Link key={i} href={`/browse?skill=${encodeURIComponent(rec.title)}`} className="block">
                   <div className="h-full bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all group cursor-pointer">
                     <div className="flex justify-between items-start mb-4">

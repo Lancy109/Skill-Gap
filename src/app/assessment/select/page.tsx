@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Layout, Server, Smartphone, Brain, Monitor, Check, ArrowRight, ArrowLeft } from 'lucide-react';
 import { useAssessmentStore } from '@/lib/assessmentStore';
-import { getLanguagesForCategory, getQuestionsForLanguage, selectRandomQuestions, getQuestionCount } from '@/lib/assessmentEngine';
+import { getLanguagesForCategory, getQuestionsForLanguage, selectRandomQuestions, getQuestionCount, shuffleOptions } from '@/lib/assessmentEngine';
 import type { Category } from '@/lib/types';
 
 export default function SelectionPage() {
@@ -21,7 +21,7 @@ export default function SelectionPage() {
         }
     }, [currentLevel, router]);
 
-    const domains: { id: Category; icon: any; color: string }[] = [
+    const domains: { id: Category; icon: React.ElementType; color: string }[] = [
         { id: 'Frontend', icon: Layout, color: 'bg-blue-500' },
         { id: 'Backend', icon: Server, color: 'bg-green-500' },
         { id: 'Mobile', icon: Smartphone, color: 'bg-purple-500' },
@@ -58,7 +58,6 @@ export default function SelectionPage() {
         const questions = selectRandomQuestions(allQuestions, count, []);
 
         // Prepare questions (shuffle options for each)
-        const { shuffleOptions } = require('@/lib/assessmentEngine');
         const preparedQuestions = questions.map(q => shuffleOptions(q));
 
         setQuestions(preparedQuestions);

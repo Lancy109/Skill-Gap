@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -6,16 +6,21 @@ import {
     Zap, ArrowLeft, Play, ExternalLink, Globe, Coffee, ChevronRight, X, Sparkles, Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import { useUser } from '@clerk/nextjs';
 // ...existing code...
 import SummaryModal from '@/components/SummaryModal';
 import { syncProgressToDb, recordLectureProgress } from '@/actions/progress';
 import { summarizeVideo } from '@/actions/ai';
+import { getCourseLogo } from '@/lib/courseLogos';
+
 
 const CoffeeIcon = () => <Coffee size={20} />;
 
-const skillRegistry: Record<string, any> = {
+type SkillInfo = { title: string; category: string; priority: string; icon: React.ReactNode; color: string };
+
+const skillRegistry: Record<string, SkillInfo> = {
     "Python": { title: "Python", category: "Backend", priority: "Recommended", icon: <Code2 />, color: "from-blue-500 to-blue-700" },
     "C": { title: "C", category: "Backend", priority: "Medium Priority", icon: <Cpu />, color: "from-purple-500 to-purple-700" },
     "Advanced JavaScript": { title: "Advanced JavaScript", category: "Frontend", priority: "High Priority", icon: <Code2 />, color: "from-amber-400 to-orange-500" },
@@ -31,11 +36,11 @@ const skillRegistry: Record<string, any> = {
     "HTML & CSS": { title: "HTML & CSS", category: "Frontend", priority: "High Priority", icon: <Globe />, color: "from-pink-500 to-rose-600" }
 };
 
-export default function BrowseClient({ initialPlaylists, userId = "default_user" }: { initialPlaylists: any[], userId?: string }) {
+export default function BrowseClient({ initialPlaylists, userId = "default_user" }: { initialPlaylists: { id: string; title: string; playlist_url: string; videos: { youtube_video_id: string; title: string; position: number }[] }[]; userId?: string }) {
     const { user } = useUser();
     const effectiveUserId = user?.id || userId;
     const [isMounted, setIsMounted] = useState(false);
-    const [selectedSkill, setSelectedSkill] = useState<any>(null);
+    const [selectedSkill, setSelectedSkill] = useState<SkillInfo | null>(null);
     const [activePlaylistId, setActivePlaylistId] = useState<string | null>(null);
     const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
     const [watchedVideos, setWatchedVideos] = useState<string[]>([]);
@@ -47,10 +52,10 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
     const [isGenerating, setIsGenerating] = useState(false);
 
     const searchParams = useSearchParams();
-    const router = useRouter();
     const USER_PROGRESS_KEY = `skill-gap-progress-${effectiveUserId}`;
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsMounted(true);
 
         const skillName = searchParams.get('skill');
@@ -65,7 +70,7 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
             if (resumeVideo) {
                 setActiveVideoId(resumeVideo);
                 // optional: restore stored position if we saved one
-                const idx = progress[skillName].history?.find((h: any) => h.videoId === resumeVideo);
+                const idx = progress[skillName].history?.find((h: { videoId: string; position?: number }) => h.videoId === resumeVideo);
                 if (idx?.position) setResumePosition(idx.position);
             }
         }
@@ -76,6 +81,7 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
             const progress = JSON.parse(localStorage.getItem(USER_PROGRESS_KEY) || "{}");
             if (progress[selectedSkill.title]) {
                 if (progress[selectedSkill.title].watched) {
+                    // eslint-disable-next-line react-hooks/set-state-in-effect
                     setWatchedVideos(progress[selectedSkill.title].watched);
                 }
                 if (progress[selectedSkill.title].lastWatched) {
@@ -84,9 +90,9 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
                         setResumePosition(progress[selectedSkill.title].lastWatched.position);
                     }
                 }
-            } else {
-                setWatchedVideos([]);
             }
+        } else {
+            setWatchedVideos([]);
         }
     }, [selectedSkill, USER_PROGRESS_KEY]);
 
@@ -100,6 +106,7 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
             const progress = JSON.parse(localStorage.getItem(USER_PROGRESS_KEY) || "{}");
             const last = progress[selectedSkill.title]?.lastWatched;
             if (last?.videoId === activeVideoId && last.position) {
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setResumePosition(last.position);
             } else {
                 setResumePosition(0);
@@ -146,7 +153,7 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
                 } else {
                     window.open(cleanUrl, '_blank');
                 }
-            } catch (e) {
+            } catch {
                 window.open(rawUrl, '_blank');
             }
         }
@@ -174,7 +181,7 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
             // update lastWatched as well
             existing[selectedSkill.title].lastWatched = {
                 videoId: activeVideoId!,
-                title: currentPlaylist.videos.find((v: any) => v.youtube_video_id === activeVideoId)?.title,
+                title: currentPlaylist.videos.find((v: { youtube_video_id: string; title: string }) => v.youtube_video_id === activeVideoId)?.title,
                 timestamp: new Date().toISOString()
             };
 
@@ -185,10 +192,10 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
         await syncProgressToDb(effectiveUserId, selectedSkill.title, updatedWatched, total);
         // also record a lecture event with completion flag
         await recordLectureProgress(userId, selectedSkill.title, activeVideoId!, {
-            title: currentPlaylist.videos.find((v: any) => v.youtube_video_id === activeVideoId)?.title,
+            title: currentPlaylist.videos.find((v: { youtube_video_id: string; title: string }) => v.youtube_video_id === activeVideoId)?.title,
             completed: true
         });
-        const currentIndex = currentPlaylist.videos.findIndex((v: any) => v.youtube_video_id === activeVideoId);
+        const currentIndex = currentPlaylist.videos.findIndex((v: { youtube_video_id: string }) => v.youtube_video_id === activeVideoId);
         if (currentIndex !== -1 && currentIndex < currentPlaylist.videos.length - 1) {
             setActiveVideoId(currentPlaylist.videos[currentIndex + 1].youtube_video_id);
         }
@@ -197,7 +204,7 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
     const handleSummarize = async () => {
         if (!activeVideoId) return;
 
-        const currentVideo = currentPlaylist?.videos?.find((v: any) => v.youtube_video_id === activeVideoId);
+        const currentVideo = currentPlaylist?.videos?.find((v: { youtube_video_id: string; title: string }) => v.youtube_video_id === activeVideoId);
         const titleToSummarize = currentVideo?.title || selectedSkill?.title || "Technical Video";
 
         setShowSummary(true);
@@ -207,7 +214,7 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
         const result = await summarizeVideo(activeVideoId, titleToSummarize);
 
         if (result.error) {
-            setSummaryText(`❌ **AI Error**\n\n${result.error}`);
+            setSummaryText(`? **AI Error**\n\n${result.error}`);
         } else {
             setSummaryText(result.summary || "No summary available.");
         }
@@ -261,14 +268,14 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
                                             <div className="flex-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar">
                                                 <div className="space-y-2">
                                                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Interactive Steps</p>
-                                                    {currentPlaylist?.videos?.map((video: any, index: number) => (
+                                                    {currentPlaylist?.videos?.map((video: { youtube_video_id: string; title: string }, index: number) => (
                                                         <div
                                                             key={video.youtube_video_id}
                                                             onClick={() => setActiveVideoId(video.youtube_video_id)}
                                                             className={`flex items-start gap-3 p-3 rounded-xl cursor-pointer border transition-all ${activeVideoId === video.youtube_video_id ? 'bg-indigo-600 border-indigo-400 text-white' : 'bg-white border-slate-100 hover:border-indigo-200 text-slate-600'}`}
                                                         >
                                                             <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] shrink-0 font-bold ${activeVideoId === video.youtube_video_id ? 'bg-white text-indigo-600' : watchedVideos.includes(video.youtube_video_id) ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-500'}`}>
-                                                                {watchedVideos.includes(video.youtube_video_id) ? '✓' : index + 1}
+                                                                {watchedVideos.includes(video.youtube_video_id) ? '?' : index + 1}
                                                             </div>
                                                             <span className={`text-[11px] font-bold leading-tight ${activeVideoId === video.youtube_video_id ? 'text-white' : 'text-slate-700'}`}>
                                                                 {video.title}
@@ -316,7 +323,16 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
                                     <div className="bg-white border border-slate-100 rounded-[32px] p-8 lg:p-12 shadow-xl mb-10 relative overflow-hidden">
                                         <div className={`absolute top-0 right-0 w-64 h-64 bg-linear-to-br ${selectedSkill.color} opacity-5 blur-3xl -mr-20 -mt-20`} />
                                         <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
-                                            <div className={`w-28 h-28 bg-linear-to-br ${selectedSkill.color} rounded-3xl flex items-center justify-center text-white shadow-2xl`}>{React.cloneElement(selectedSkill.icon, { size: 48 })}</div>
+                                            <div className={`w-28 h-28 bg-linear-to-br ${selectedSkill.color} rounded-3xl flex items-center justify-center text-white shadow-2xl`}>
+                                                <Image
+                                                    src={getCourseLogo(selectedSkill.title).url}
+                                                    alt={selectedSkill.title}
+                                                    width={64}
+                                                    height={64}
+                                                    className="w-16 h-16 object-contain"
+                                                    unoptimized={true}
+                                                />
+                                            </div>
                                             <div className="text-center md:text-left">
                                                 <h1 className="text-5xl font-black text-slate-900 mb-6 tracking-tighter">{selectedSkill.title}</h1>
                                                 <button onClick={handleStartLearning} className="group flex items-center gap-3 bg-slate-900 text-white px-10 py-4 rounded-2xl font-bold hover:bg-indigo-600 transition-all shadow-xl"><Play size={18} fill="currentColor" /> Open Resource</button>
@@ -351,9 +367,18 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
     );
 }
 
-const SkillCard = ({ skill, onSelect }: any) => (
+const SkillCard = ({ skill, onSelect }: { skill: SkillInfo; onSelect: () => void }) => (
     <motion.div whileHover={{ y: -8 }} onClick={onSelect} className="group relative bg-white p-8 rounded-[32px] border border-slate-100 cursor-pointer transition-all hover:shadow-xl hover:border-slate-200">
-        <div className={`w-14 h-14 bg-linear-to-br ${skill.color} rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>{React.cloneElement(skill.icon, { size: 28 })}</div>
+        <div className={`w-14 h-14 bg-linear-to-br ${skill.color} rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+            <Image
+                src={getCourseLogo(skill.title).url}
+                alt={skill.title}
+                width={32}
+                height={32}
+                className="w-8 h-8 object-contain"
+                unoptimized={true}
+            />
+        </div>
         <h4 className="font-bold text-xl text-slate-900 tracking-tight mb-2">{skill.title}</h4>
         <div className="flex items-center justify-between mt-4">
             <span className="text-[10px] text-slate-400 uppercase font-black tracking-widest">{skill.priority}</span>

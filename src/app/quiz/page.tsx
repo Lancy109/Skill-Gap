@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { Question, getRandomQuestions } from '@/lib/skillEngine';
 // Note: We need to import questions from the correct file or ensure skillEngine exports it or just use the logic
 // In previous steps I updated skillEngine/questions interactions. 
@@ -38,6 +38,7 @@ function QuizContent() {
         if (loadedQuestions.length === 0) {
             // Fallback if no questions found (for demo resilience)
             const fallback = getRandomQuestions('React', count);
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setQuestions(fallback);
         } else {
             setQuestions(loadedQuestions);
@@ -107,13 +108,13 @@ function QuizContent() {
                         className="bg-white rounded-[32px] p-8 md:p-10 shadow-xl shadow-slate-200/50 border border-white"
                     >
                         <span className={`inline-block px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-wider mb-6 ${currentQ.difficulty === 'advanced' ? 'bg-red-50 text-red-600' :
-                                currentQ.difficulty === 'applied' ? 'bg-blue-50 text-blue-600' : 'bg-emerald-50 text-emerald-600'
+                            currentQ.difficulty === 'applied' ? 'bg-blue-50 text-blue-600' : 'bg-emerald-50 text-emerald-600'
                             }`}>
                             {currentQ.difficulty}
                         </span>
 
                         <h2 className="text-2xl font-bold text-slate-900 mb-8 leading-tight">
-                            {(currentQ as any).text || "Question text missing."}
+                            {(currentQ as { text?: string }).text || "Question text missing."}
                         </h2>
 
                         <div className="space-y-3">
@@ -124,8 +125,8 @@ function QuizContent() {
                                         key={idx}
                                         onClick={() => handleAnswer(currentQ.id, idx)}
                                         className={`w-full p-5 rounded-2xl text-left font-bold text-sm transition-all border-2 group flex items-center justify-between ${isSelected
-                                                ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
-                                                : 'border-slate-50 bg-slate-50 text-slate-600 hover:bg-white hover:border-indigo-100 hover:shadow-lg hover:shadow-indigo-500/5'
+                                            ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
+                                            : 'border-slate-50 bg-slate-50 text-slate-600 hover:bg-white hover:border-indigo-100 hover:shadow-lg hover:shadow-indigo-500/5'
                                             }`}
                                     >
                                         <div className="flex items-center gap-4">

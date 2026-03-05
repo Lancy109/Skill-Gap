@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useUser } from '@clerk/nextjs';
-import { User, Mail, Briefcase, Calendar, FileText, Code2, LogOut, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
+import { User, Mail, Briefcase, Calendar, FileText, Code2 } from 'lucide-react';
 
 export default function ProfilePage() {
   const { user, isLoaded } = useUser();
-  const [profileData, setProfileData] = useState<any>(null);
+  const [profileData, setProfileData] = useState<Record<string, string | number | null | undefined> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -68,10 +69,15 @@ export default function ProfilePage() {
 
         <div className="px-8 pb-8 relative">
           {/* Avatar floating */}
-          <div className="absolute -top-12 left-8 w-24 h-24 bg-white rounded-full p-1 shadow-md">
-            <div className="w-full h-full bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500 text-3xl font-black uppercase">
-              {profileData.name ? profileData.name.charAt(0) : "U"}
-            </div>
+          <div className="absolute -top-12 left-8 w-24 h-24 bg-white rounded-full p-1 shadow-md overflow-hidden">
+            <Image
+              src={user?.imageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profileData.name || 'user'}`}
+              alt={String(profileData.name ?? 'User')}
+              width={96}
+              height={96}
+              className="w-full h-full object-cover rounded-full"
+              unoptimized={true}
+            />
           </div>
 
           <div className="pt-16 pb-6 border-b border-slate-50 flex flex-col md:flex-row md:items-center justify-between gap-4">

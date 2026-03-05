@@ -60,12 +60,17 @@ export function calculateScore(userAnswers: Record<string, number>, quizQuestion
     let maxScore = 0;
 
     quizQuestions.forEach(q => {
-        const weight = DIFFICULTY_WEIGHTS[q.difficulty] || 1;
-        maxScore += weight; // Max weighted score
+        // prefer explicit points when available (our question bank now includes them)
+        // fallback to difficulty weight for backward compatibility
+        const pts = typeof q.points === 'number'
+            ? q.points
+            : DIFFICULTY_WEIGHTS[q.difficulty] || 1;
+
+        maxScore += pts;
 
         const answerIndex = userAnswers[q.id];
         if (answerIndex !== undefined && answerIndex === q.correctIndex) {
-            totalScore += weight;
+            totalScore += pts;
         }
     });
 

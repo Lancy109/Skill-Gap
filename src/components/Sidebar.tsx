@@ -47,7 +47,9 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
 
       {/* 2. FOOTER (Pinned to Bottom) */}
       <div className="mt-auto px-3 pb-6 space-y-1 border-t border-slate-50 pt-4 bg-white">
-        <NavItem icon={<Settings size={20} />} label="Settings" collapsed={isCollapsed} />
+        <Link href="/setting" className="block">
+          <NavItem icon={<Settings size={20} />} label="Settings" active={pathname === '/setting'} collapsed={isCollapsed} />
+        </Link>
 
         <div onClick={() => signOut(() => router.push("/"))}>
           <NavItem
@@ -63,7 +65,13 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
 };
 
 // Internal NavItem Helper
-const NavItem = ({ icon, label, active, collapsed, isLogout }: any) => (
+const NavItem = ({ icon, label, active, collapsed, isLogout }: {
+  icon: React.ReactNode;
+  label: string;
+  active?: boolean;
+  collapsed: boolean;
+  isLogout?: boolean;
+}) => (
   <div className={`
     relative w-full flex items-center transition-all duration-200 rounded-xl font-medium text-sm h-11 cursor-pointer mb-1 overflow-hidden select-none
     ${active ? "text-indigo-600 bg-indigo-50" : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"}

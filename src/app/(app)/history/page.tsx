@@ -2,12 +2,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { History, Play, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useUser } from '@clerk/nextjs';
+import { getCourseLogo } from '@/lib/courseLogos';
 
 export default function HistoryPage() {
   const { user, isLoaded } = useUser();
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<{
+    progress?: {
+      skills?: Record<string, { watched: string[]; total: number }>;
+    };
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -73,7 +79,7 @@ export default function HistoryPage() {
 
       if (response.ok) {
         // Optimistically remove from state
-        setData((prevData: any) => {
+        setData((prevData: { progress?: { skills?: Record<string, { watched: string[]; total: number }> } } | null) => {
           if (!prevData?.progress?.skills) return prevData;
           const newSkills = { ...prevData.progress.skills };
           delete newSkills[skillName];
@@ -156,14 +162,24 @@ export default function HistoryPage() {
       <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
         {activeSkills.length > 0 ? (
           <div className="divide-y divide-slate-50">
-            {activeSkills.map(([skillName, skillData]: [string, any]) => {
+            {activeSkills.map(([skillName, skillData]: [string, { watched: string[]; total: number }]) => {
               const progress = skillData.total > 0 ? Math.round((skillData.watched.length / skillData.total) * 100) : 0;
               const isDeletingThis = isDeletingCourse[skillName];
 
               return (
                 <div key={skillName} className={`p-6 hover:bg-slate-50 transition-colors flex flex-col md:flex-row gap-6 md:items-center group ${isDeletingThis ? 'opacity-50 pointer-events-none' : ''}`}>
-                  <div className="w-full md:w-32 h-20 bg-indigo-50 rounded-xl flex flex-col items-center justify-center shrink-0 text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-all">
-                    <Play className="mb-1" size={24} />
+                  <div className="w-full md:w-32 h-20 rounded-xl flex items-center justify-center shrink-0 overflow-hidden transition-all relative" style={{ backgroundColor: getCourseLogo(skillName).bgColor.replace('bg-', '#').substring(0, 7) || '#6366f1' }}>
+                    <Image
+                      src={getCourseLogo(skillName).url}
+                      alt={`${skillName} logo`}
+                      width={48}
+                      height={48}
+                      className="w-12 h-12 object-contain"
+                      unoptimized={true}
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/30 transition-opacity">
+                      <Play size={28} className="text-white" />
+                    </div>
                   </div>
 
                   <div className="flex-1">

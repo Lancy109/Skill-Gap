@@ -42,16 +42,17 @@ function ProfileSetupContent() {
     setLoading(true);
     try {
       // Logic to initialize the skills object optionally with the selected skill
-      const payload: any = {
+      const payload = {
         ...formData,
-        skills: {}
+        activeSkill: formData.activeSkill || undefined,
+        skills: {} as Record<string, { watched: string[]; total: number }>
       };
 
       if (selectedSkill) {
         payload.skills[selectedSkill] = { watched: [], total: 10 };
         payload.activeSkill = selectedSkill;
       } else {
-        payload.activeSkill = null;
+        payload.activeSkill = undefined;
       }
 
       await updateUserProfile(user.id, payload);

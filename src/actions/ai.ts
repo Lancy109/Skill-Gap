@@ -44,11 +44,11 @@ export async function summarizeVideo(videoId: string, title: string) {
       error: undefined
     };
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Groq Summarization Error:', error);
     return {
       summary: '',
-      error: error.message || 'Failed to generate summary with Groq.'
+      error: error instanceof Error ? error.message : 'Failed to generate summary with Groq.'
     };
   }
 }

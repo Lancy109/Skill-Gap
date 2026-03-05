@@ -2,10 +2,30 @@
 
 import { prisma } from '@/lib/prisma';
 
+type SkillEntry = {
+  watched?: string[];
+  total?: number;
+  lastWatched?: { videoId: string; title?: string; position?: number; timestamp: string };
+  history?: { videoId: string; title?: string; position?: number; watchedAt: string }[];
+  updatedAt?: string;
+};
+
+type SkillsMap = Record<string, SkillEntry>;
+
+type ProfileData = {
+  name?: string;
+  email?: string;
+  designation?: string;
+  age?: string | number;
+  bio?: string;
+  activeSkill?: string | null;
+  skills?: SkillsMap;
+};
+
 export async function syncProgressToDb(userId: string, skill: string, watched: string[], total: number) {
   try {
     const existingRecord = await prisma.userProgress.findUnique({ where: { userId } });
-    const existingSkills = (existingRecord?.skills as Record<string, any>) || {};
+    const existingSkills = (existingRecord?.skills as SkillsMap) || {};
 
     const existingEntry = existingSkills[skill] || {};
 
@@ -44,7 +64,7 @@ export async function recordLectureProgress(
 ) {
   try {
     const existingRecord = await prisma.userProgress.findUnique({ where: { userId } });
-    const existingSkills = (existingRecord?.skills as Record<string, any>) || {};
+    const existingSkills = (existingRecord?.skills as SkillsMap) || {};
 
     const entry = existingSkills[skill] || { watched: [], total: 0 };
 
@@ -94,7 +114,7 @@ export async function recordLectureProgress(
   }
 }
 
-export async function updateUserProfile(userId: string, data: any) {
+export async function updateUserProfile(userId: string, data: ProfileData) {
   try {
     const { name, email, designation, age, bio, activeSkill, skills } = data;
 

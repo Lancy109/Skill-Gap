@@ -199,3 +199,57 @@ export const questions: Question[] = [
         correctIndex: 0
     }
 ];
+
+// Add HTML & CSS questions
+questions.push(
+    {
+        id: 'htmlcss-1',
+        language: 'HTML & CSS',
+        difficulty: 'conceptual',
+        points: 8,
+        text: 'What does the HTML <header> element represent in a document?',
+        options: [
+            'Introductory content or a set of navigational links',
+            'A table header cell',
+            'A footer for the document',
+            'A script section'
+        ],
+        correctIndex: 0
+    },
+    {
+        id: 'htmlcss-2',
+        language: 'HTML & CSS',
+        difficulty: 'applied',
+        points: 10,
+        text: 'Which CSS property controls the space between an element\'s content and its border?',
+        options: ['margin', 'padding', 'gap', 'spacing'],
+        correctIndex: 1
+    },
+    {
+        id: 'htmlcss-3',
+        language: 'HTML & CSS',
+        difficulty: 'applied',
+        points: 12,
+        text: 'Which semantic element should be used to mark up self-contained content that could be independently distributed or reused?',
+        options: ['<div>', '<article>', '<section>', '<span>'],
+        correctIndex: 1
+    },
+    {
+        id: 'htmlcss-4',
+        language: 'HTML & CSS',
+        difficulty: 'advanced',
+        points: 16,
+        text: 'What is the difference between block and inline elements?',
+        options: ['Block elements start on a new line and take full width; inline do not', 'Inline elements always have margins; block elements do not', 'Block elements cannot contain text; inline elements can', 'There is no difference'],
+        correctIndex: 0
+    },
+    {
+        id: 'htmlcss-5',
+        language: 'HTML & CSS',
+        difficulty: 'conceptual',
+        points: 8,
+        text: 'Which attribute is used to provide alternative text for an image for accessibility?',
+        options: ['title', 'alt', 'caption', 'desc'],
+        correctIndex: 1
+    }
+);

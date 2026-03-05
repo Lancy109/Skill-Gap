@@ -17,6 +17,7 @@
  * 3. Remove all user progress from the database
  */
 
+/* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require("fs");
 const path = require("path");
 
@@ -90,7 +91,7 @@ async function clearAllClerkData() {
             where: { userId: user.id },
           });
           console.log(`  ✅ Deleted from database`);
-        } catch (e) {
+        } catch {
           // User may not exist in database, that's okay
           console.log(`  ℹ️  Not in database (or already deleted)`);
         }

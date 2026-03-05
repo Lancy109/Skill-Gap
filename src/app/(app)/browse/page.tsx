@@ -2,14 +2,17 @@
 import { prisma } from "@/lib/prisma";
 import BrowseClient from "./BrowseClient";
 
+type DbPlaylist = { id: string; title: string; playlist_url: string };
+type DbVideo = { playlist_id: string; title: string; youtube_video_id: string; position: number };
+
 export default async function BrowsePage() {
   // Fetch all playlists and their videos using raw queries
   // Workaround: Using raw query because Prisma client generation is blocked by the active dev server
-  let dbPlaylists: any[] = [];
-  let dbVideos: any[] = [];
+  let dbPlaylists: DbPlaylist[] = [];
+  let dbVideos: DbVideo[] = [];
   try {
-    dbPlaylists = await prisma.$queryRawUnsafe('SELECT id, title, playlist_url FROM "playlists"') as any[];
-    dbVideos = await prisma.$queryRawUnsafe('SELECT playlist_id, title, youtube_video_id, position FROM "videos" ORDER BY position ASC') as any[];
+    dbPlaylists = await prisma.$queryRawUnsafe('SELECT id, title, playlist_url FROM "playlists"') as DbPlaylist[];
+    dbVideos = await prisma.$queryRawUnsafe('SELECT playlist_id, title, youtube_video_id, position FROM "videos" ORDER BY position ASC') as DbVideo[];
   } catch (err) {
     // If the database is unreachable (e.g., local dev or misconfigured env), avoid crashing the page.
     // Fall back to mock data so the UI can render and the user can still navigate and test.

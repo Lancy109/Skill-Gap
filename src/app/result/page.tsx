@@ -3,10 +3,9 @@
 import React, { Suspense, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { RotateCw, BookOpen, CheckCircle, ArrowRight } from 'lucide-react';
+import { RotateCw, ArrowRight } from 'lucide-react';
 import { calculateScore, calculateRating } from '@/lib/skillEngine';
 import { questions as allQuestions } from '@/lib/questions';
-import Link from 'next/link';
 
 function ResultContent() {
     const searchParams = useSearchParams();
@@ -30,7 +29,7 @@ function ResultContent() {
             const { totalScore, maxScore } = calculateScore(answers, quizQuestions);
             const rating = calculateRating(totalScore, maxScore);
             return { rating, score: totalScore, maxScore };
-        } catch (e) {
+        } catch {
             return { rating: 1, score: 0, maxScore: 0 };
         }
     }, [answersStr, qIdsStr, level]);
@@ -48,7 +47,7 @@ function ResultContent() {
                     animate={{ opacity: 1, y: 0 }}
                     className="bg-white rounded-[32px] p-8 shadow-xl shadow-slate-200/50 text-center relative overflow-hidden"
                 >
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-500" />
+                    <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 to-purple-500" />
 
                     <span className="inline-block px-3 py-1 bg-slate-50 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6">
                         Assessment Complete
@@ -79,7 +78,7 @@ function ResultContent() {
                     ) : (
                         <div className="mb-8 p-6 bg-indigo-50 rounded-2xl">
                             <h3 className="text-indigo-900 font-bold mb-2">Welcome to your journey!</h3>
-                            <p className="text-indigo-600 text-sm">Since you're starting as a beginner, we've skipped the quiz to focus on your learning path.</p>
+                            <p className="text-indigo-600 text-sm">Since you&apos;re starting as a beginner, we&apos;ve skipped the quiz to focus on your learning path.</p>
                         </div>
                     )}
 

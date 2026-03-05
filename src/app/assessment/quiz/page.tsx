@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Clock, AlertCircle } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useAssessmentStore } from '@/lib/assessmentStore';
 
 export default function QuizPage() {

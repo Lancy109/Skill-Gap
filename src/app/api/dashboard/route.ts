@@ -15,14 +15,14 @@ export async function GET(request: Request) {
         });
 
         // Initialize defaults if not found
-        const skills: Record<string, any> = userProgress?.skills ? (userProgress.skills as Record<string, any>) : {};
+        const skills: Record<string, { watched?: string[]; total?: number }> = userProgress?.skills ? (userProgress.skills as Record<string, { watched?: string[]; total?: number }>) : {};
         const activeSkill = userProgress?.activeSkill || "Select a Track";
 
         let totalLecturesCompleted = 0;
         let totalTotalLectures = 0;
 
         // Map each started skill to a comparison object
-        const comparisonData = Object.entries(skills).map(([name, data]: [string, any]) => {
+        const comparisonData = Object.entries(skills).map(([name, data]: [string, { watched?: string[]; total?: number }]) => {
             const watchedCount = Array.isArray(data.watched) ? data.watched.length : 0;
             const total = data.total || 0;
             totalLecturesCompleted += watchedCount;
