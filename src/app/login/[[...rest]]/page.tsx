@@ -9,21 +9,47 @@ export default function Page() {
   const { user, isLoaded } = useUser();
   const router = useRouter();
 
-  // If user just authenticated via Google but is new, redirect to profile setup
+  // If user just authenticated, check for an existing profile
   useEffect(() => {
-    if (!isLoaded) return;
+    async function checkExistingProfile() {
+      if (!isLoaded || !user) return;
+      try {
+        const response = await fetch(`/api/profile?userId=${user.id}`);
+        if (response.ok) {
+          const profile = await response.json();
 
-    if (user) {
-      const hasProfile = user.publicMetadata?.profileSetup === true;
+          // Restore theme from DB if it exists
+          if (profile.theme) {
+            try {
+              const raw = localStorage.getItem('skill-gap-settings');
+              const settings = raw ? JSON.parse(raw) : {};
+              settings.theme = profile.theme;
+              localStorage.setItem('skill-gap-settings', JSON.stringify(settings));
 
-      if (!hasProfile) {
-        // New user from Google login → send to profile creation
-        router.replace("/skill-input");
-      } else {
-        // Existing user → go to dashboard
-        router.replace("/dashboard");
+              // Apply immediately to prevent flash
+              if (profile.theme === 'dark' || (profile.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+              } else {
+                document.documentElement.classList.remove('dark');
+              }
+            } catch (e) {
+              console.warn('Failed to restore theme to localStorage', e);
+            }
+          }
+
+          // Profile exists -> Dashboard
+          router.replace("/dashboard");
+        } else {
+          // Profile does not exist -> Setup
+          router.replace("/skill-input");
+        }
+      } catch (err) {
+        console.error("Error checking profile:", err);
+        router.replace("/skill-input"); // Fallback to setup
       }
     }
+
+    checkExistingProfile();
   }, [user, isLoaded, router]);
 
   // Show loading state while checking
@@ -54,18 +80,19 @@ export default function Page() {
           </p>
         </div>
 
-        <SignIn 
+        <SignIn
           signUpUrl="/register"
+          forceRedirectUrl="/dashboard"
           appearance={{
             elements: {
-              formButtonPrimary: 
+              formButtonPrimary:
                 "bg-indigo-600 hover:bg-indigo-700 text-sm font-bold py-3 rounded-xl transition-all shadow-md shadow-indigo-100",
               card: "shadow-2xl shadow-slate-200/50 border border-slate-100 rounded-2xl",
               headerTitle: "text-slate-900 font-bold",
               headerSubtitle: "text-slate-500 font-medium",
-              socialButtonsBlockButton: 
+              socialButtonsBlockButton:
                 "border-slate-200 hover:bg-slate-50 rounded-xl transition-all text-slate-600 font-bold",
-              formFieldInput: 
+              formFieldInput:
                 "rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 transition-all",
               footerActionLink: "text-indigo-600 hover:text-indigo-700 font-bold",
             },

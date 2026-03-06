@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { Moon, Sun, Monitor, Bell, Clock, Zap, Volume2, BookOpen, Users } from 'lucide-react';
+import { useUser } from '@clerk/nextjs';
+import { updateUserTheme } from '@/actions/progress';
 
 type Settings = {
   theme: 'light' | 'dark' | 'system';
@@ -15,7 +17,7 @@ type Settings = {
 };
 
 const DEFAULT: Settings = {
-  theme: 'system',
+  theme: 'light',
   notifications: { email: true, push: true, sound: true },
   reminders: { enabled: true, frequency: 'daily', time: '09:00', days: [] },
   learningGoal: 5,
@@ -42,11 +44,13 @@ function applyTheme(theme: 'light' | 'dark' | 'system') {
 }
 
 export default function SettingsPage() {
+  const { user } = useUser();
   const [settings, setSettings] = useState<Settings>(DEFAULT);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [saved, setSaved] = useState(false);
   const timeInputRef = useRef<HTMLInputElement>(null);
 
-  // Load from localStorage on mount + apply theme
+  // Load from localStorage on mount
   useEffect(() => {
     try {
       const raw = localStorage.getItem('skill-gap-settings');
@@ -59,18 +63,21 @@ export default function SettingsPage() {
       }
     } catch (e) {
       console.error('Failed to load settings', e);
+    } finally {
+      setIsLoaded(true);
     }
   }, []);
 
-  // Persist + re-apply whenever settings change
+  // Persist + re-apply whenever settings change (only after initial load)
   useEffect(() => {
+    if (!isLoaded) return;
     try {
       localStorage.setItem('skill-gap-settings', JSON.stringify(settings));
       applyTheme(settings.theme);
     } catch (e) {
       console.error('Failed to persist settings', e);
     }
-  }, [settings]);
+  }, [settings, isLoaded]);
 
   // Listen for OS dark/light preference changes when 'system' is selected
   useEffect(() => {
@@ -89,6 +96,14 @@ export default function SettingsPage() {
   const changeTheme = (theme: 'light' | 'dark' | 'system') => {
     setSettings(s => ({ ...s, theme }));
     applyTheme(theme);
+
+    // Sync to DB
+    if (user) {
+      updateUserTheme(user.id, theme).catch(err => {
+        console.error('Failed to sync theme to DB', err);
+      });
+    }
+
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
@@ -114,8 +129,8 @@ export default function SettingsPage() {
           <button
             onClick={() => changeTheme('light')}
             className={`flex items-center gap-2 px-6 py-3 rounded-xl border-2 font-bold transition-all ${settings.theme === 'light'
-                ? 'bg-indigo-50 border-indigo-600 text-indigo-700'
-                : 'border-slate-200 text-slate-600 hover:border-slate-300'
+              ? 'bg-indigo-50 border-indigo-600 text-indigo-700'
+              : 'border-slate-200 text-slate-600 hover:border-slate-300'
               }`}
           >
             <Sun size={18} /> Light
@@ -123,8 +138,8 @@ export default function SettingsPage() {
           <button
             onClick={() => changeTheme('dark')}
             className={`flex items-center gap-2 px-6 py-3 rounded-xl border-2 font-bold transition-all ${settings.theme === 'dark'
-                ? 'bg-indigo-50 border-indigo-600 text-indigo-700'
-                : 'border-slate-200 text-slate-600 hover:border-slate-300'
+              ? 'bg-indigo-50 border-indigo-600 text-indigo-700'
+              : 'border-slate-200 text-slate-600 hover:border-slate-300'
               }`}
           >
             <Moon size={18} /> Dark
@@ -132,8 +147,8 @@ export default function SettingsPage() {
           <button
             onClick={() => changeTheme('system')}
             className={`flex items-center gap-2 px-6 py-3 rounded-xl border-2 font-bold transition-all ${settings.theme === 'system'
-                ? 'bg-indigo-50 border-indigo-600 text-indigo-700'
-                : 'border-slate-200 text-slate-600 hover:border-slate-300'
+              ? 'bg-indigo-50 border-indigo-600 text-indigo-700'
+              : 'border-slate-200 text-slate-600 hover:border-slate-300'
               }`}
           >
             <Monitor size={18} /> System
@@ -251,8 +266,8 @@ export default function SettingsPage() {
                           }
                         }}
                         className={`py-2 rounded-lg font-bold text-sm transition-all ${(settings.reminders.days || []).includes(day)
-                            ? 'bg-indigo-600 text-white'
-                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                           }`}
                       >
                         {day}

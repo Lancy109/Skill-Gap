@@ -20,6 +20,7 @@ type ProfileData = {
   bio?: string;
   activeSkill?: string | null;
   skills?: SkillsMap;
+  theme?: string | null;
 };
 
 export async function syncProgressToDb(userId: string, skill: string, watched: string[], total: number) {
@@ -116,7 +117,7 @@ export async function recordLectureProgress(
 
 export async function updateUserProfile(userId: string, data: ProfileData) {
   try {
-    const { name, email, designation, age, bio, activeSkill, skills } = data;
+    const { name, email, designation, age, bio, activeSkill, skills, theme } = data;
 
     // Convert age to number cleanly
     const parsedAge = age ? parseInt(age.toString(), 10) : null;
@@ -130,6 +131,7 @@ export async function updateUserProfile(userId: string, data: ProfileData) {
         age: parsedAge,
         bio,
         activeSkill,
+        theme,
         skills,
         updatedAt: new Date()
       },
@@ -141,11 +143,25 @@ export async function updateUserProfile(userId: string, data: ProfileData) {
         age: parsedAge,
         bio,
         activeSkill,
+        theme,
         skills: skills || {}
       }
     });
   } catch (error) {
     console.error('Error updating profile in DB:', error);
+    throw error;
+  }
+}
+
+export async function updateUserTheme(userId: string, theme: string) {
+  try {
+    return await prisma.userProgress.upsert({
+      where: { userId },
+      update: { theme },
+      create: { userId, theme }
+    });
+  } catch (error) {
+    console.error('Error updating theme in DB:', error);
     throw error;
   }
 }

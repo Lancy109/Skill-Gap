@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import {
     Code2, Database, Layout, Smartphone, Cpu, Server,
-    Zap, ArrowLeft, Play, ExternalLink, Globe, Coffee, ChevronRight, X, Sparkles, Loader2
+    Zap, ArrowLeft, Play, ExternalLink, Globe, Coffee, ChevronRight, X, Sparkles, Loader2, Check
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
@@ -275,7 +275,7 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
                                                             className={`flex items-start gap-3 p-3 rounded-xl cursor-pointer border transition-all ${activeVideoId === video.youtube_video_id ? 'bg-indigo-600 border-indigo-400 text-white' : 'bg-white border-slate-100 hover:border-indigo-200 text-slate-600'}`}
                                                         >
                                                             <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] shrink-0 font-bold ${activeVideoId === video.youtube_video_id ? 'bg-white text-indigo-600' : watchedVideos.includes(video.youtube_video_id) ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-500'}`}>
-                                                                {watchedVideos.includes(video.youtube_video_id) ? '?' : index + 1}
+                                                                {watchedVideos.includes(video.youtube_video_id) ? <Check size={14} /> : index + 1}
                                                             </div>
                                                             <span className={`text-[11px] font-bold leading-tight ${activeVideoId === video.youtube_video_id ? 'text-white' : 'text-slate-700'}`}>
                                                                 {video.title}
@@ -289,7 +289,7 @@ export default function BrowseClient({ initialPlaylists, userId = "default_user"
                                                 <button
                                                     onClick={handleSummarize}
                                                     disabled={!activeVideoId || isGenerating}
-                                                    className="w-full py-3 bg-indigo-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-md shadow-indigo-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                    className="w-full py-3 bg-indigo-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                                 >
                                                     {isGenerating ? <Loader2 size={16} className="animate-spin text-white" /> : <Sparkles size={16} className="text-indigo-200" />}
                                                     {isGenerating ? 'Analyzing...' : 'Summarize Video'}

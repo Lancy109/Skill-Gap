@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useUser } from '@clerk/nextjs';
 import Image from 'next/image';
-import { User, Mail, Briefcase, Calendar, FileText, Code2, Edit2, X, Save, Camera } from 'lucide-react';
+import { User, Mail, Briefcase, Calendar, FileText, Code2, Edit2, X, Save, Camera, Trash2 } from 'lucide-react';
 import { useUserProfile } from '@/lib/UserProfileContext';
 
 export default function ProfilePage() {
@@ -78,6 +78,27 @@ export default function ProfilePage() {
     } catch (err) {
       console.error('Error saving image:', err);
       alert('Failed to save image. Please try again.');
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
+  const handleRemoveImage = async () => {
+    if (!user || !window.confirm('Are you sure you want to remove your profile photo?')) return;
+    setIsUploadingImage(true);
+    try {
+      const response = await fetch(`/api/profile?userId=${user.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profileImage: null }),
+      });
+      if (!response.ok) throw new Error('Failed to remove image');
+      // Update global context
+      setProfileImageUrl('');
+      alert('Profile photo removed!');
+    } catch (err) {
+      console.error('Error removing image:', err);
+      alert('Failed to remove image. Please try again.');
     } finally {
       setIsUploadingImage(false);
     }
@@ -298,6 +319,16 @@ export default function ProfilePage() {
               className="hidden"
               onChange={handleImageSelect}
             />
+            {/* Remove photo button */}
+            {profileImageUrl && !previewImage && (
+              <button
+                onClick={handleRemoveImage}
+                className="absolute -bottom-2 -right-2 w-8 h-8 bg-white border border-slate-200 text-red-500 rounded-full flex items-center justify-center shadow-sm hover:bg-red-50 transition-colors z-10"
+                title="Remove photo"
+              >
+                <Trash2 size={16} />
+              </button>
+            )}
           </div>
 
           {/* Preview save/cancel bar */}

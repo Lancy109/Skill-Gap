@@ -102,5 +102,6 @@ model UserProgress {
   recommendedLearningPath Json     @default("[]") // ordered list of next modules/skills
   recommendedLanguages    Json     @default("[]") // list of recommended languages/technologies
   widgetState             Json     @default("{}") // dashboard widget preferences
+  theme                   String?
   updatedAt               DateTime @updatedAt
 }

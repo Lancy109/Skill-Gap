@@ -50,7 +50,10 @@ export function UserProfileProvider({ children }: { children: React.ReactNode })
     }, [isLoaded, user]);
 
     useEffect(() => {
-        refreshProfile();
+        const fetchProfile = async () => {
+            await refreshProfile();
+        };
+        fetchProfile();
     }, [refreshProfile]);
 
     return (

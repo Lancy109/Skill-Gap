@@ -1,6 +1,67 @@
+"use client";
+
+import { useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { SignUp } from "@clerk/nextjs";
 
 export default function Page() {
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
+
+  // If user is already logged in (e.g. they hit /register with an active session)
+  useEffect(() => {
+    async function checkExistingProfile() {
+      if (!isLoaded || !user) return;
+      try {
+        const response = await fetch(`/api/profile?userId=${user.id}`);
+        if (response.ok) {
+          const profile = await response.json();
+
+          // Restore theme from DB if it exists
+          if (profile.theme) {
+            try {
+              const raw = localStorage.getItem('skill-gap-settings');
+              const settings = raw ? JSON.parse(raw) : {};
+              settings.theme = profile.theme;
+              localStorage.setItem('skill-gap-settings', JSON.stringify(settings));
+
+              // Apply immediately to prevent flash
+              if (profile.theme === 'dark' || (profile.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+              } else {
+                document.documentElement.classList.remove('dark');
+              }
+            } catch (e) {
+              console.warn('Failed to restore theme to localStorage', e);
+            }
+          }
+
+          // Profile exists -> Dashboard
+          router.replace("/dashboard");
+        } else {
+          // Profile does not exist -> Setup
+          router.replace("/skill-input");
+        }
+      } catch (err) {
+        console.error("Error checking profile:", err);
+        router.replace("/skill-input"); // Fallback to setup
+      }
+    }
+
+    checkExistingProfile();
+  }, [user, isLoaded, router]);
+
+  // Show loading state while checking
+  if (isLoaded && user) {
+    return (
+      <div className="relative flex items-center justify-center min-h-screen bg-[#F8FAFC]">
+        <div className="text-center">
+          <p className="text-slate-500">Redirecting...</p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-[#F8FAFC] overflow-hidden">
       {/* Decorative Gradient Background */}
@@ -22,19 +83,19 @@ export default function Page() {
         </div>
 
         {/* Clerk Sign Up Component */}
-        <SignUp 
+        <SignUp
           appearance={{
             elements: {
               rootBox: "mx-auto",
               card: "shadow-2xl shadow-slate-200/60 border border-slate-100 rounded-2xl bg-white",
-              formButtonPrimary: 
+              formButtonPrimary:
                 "bg-indigo-600 hover:bg-indigo-700 text-sm font-bold py-2.5 rounded-xl transition-all shadow-md shadow-indigo-100 normal-case",
               headerTitle: "text-slate-900 font-bold text-xl",
               headerSubtitle: "text-slate-500 font-medium",
-              socialButtonsBlockButton: 
+              socialButtonsBlockButton:
                 "border-slate-200 hover:bg-slate-50 rounded-xl transition-all text-slate-600 font-bold py-2",
               formFieldLabel: "text-slate-700 font-bold text-xs uppercase tracking-wider",
-              formFieldInput: 
+              formFieldInput:
                 "rounded-xl border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 transition-all bg-slate-50/50",
               footerActionLink: "text-indigo-600 hover:text-indigo-700 font-bold",
               identityPreviewText: "text-slate-600 font-medium",

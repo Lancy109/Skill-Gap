@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { LayoutDashboard, BookOpen, Pencil, History, Settings, LogOut } from 'lucide-react';
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useClerk } from "@clerk/nextjs";
 
 interface SidebarProps {
@@ -12,7 +12,6 @@ interface SidebarProps {
 
 const Sidebar = ({ isCollapsed }: SidebarProps) => {
   const pathname = usePathname();
-  const router = useRouter();
   const { signOut } = useClerk();
 
   const menuItems = [
@@ -51,7 +50,21 @@ const Sidebar = ({ isCollapsed }: SidebarProps) => {
           <NavItem icon={<Settings size={20} />} label="Settings" active={pathname === '/setting'} collapsed={isCollapsed} />
         </Link>
 
-        <div onClick={() => signOut(() => router.push("/"))}>
+        <div onClick={() => {
+          signOut(() => {
+            // Silently update settings for the next page load
+            try {
+              const raw = localStorage.getItem('skill-gap-settings');
+              const settings = raw ? JSON.parse(raw) : {};
+              settings.theme = 'light';
+              localStorage.setItem('skill-gap-settings', JSON.stringify(settings));
+            } catch {
+              localStorage.setItem('theme', 'light');
+            }
+            // Hard redirect to clear all states and trigger the light theme on the landing page
+            window.location.href = "/";
+          });
+        }}>
           <NavItem
             icon={<LogOut size={20} />}
             label="Logout"

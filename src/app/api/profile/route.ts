@@ -21,7 +21,9 @@ export async function GET(request: Request) {
                 age: true,
                 bio: true,
                 activeSkill: true,
+                profileImage: true,
                 skills: true,
+                theme: true,
                 updatedAt: true
             }
         });
@@ -47,7 +49,7 @@ export async function PUT(request: Request) {
 
     try {
         const body = await request.json();
-        const { name, designation, age, bio, activeSkill, profileImage } = body;
+        const { name, designation, age, bio, activeSkill, profileImage, theme } = body;
         // Note: email is intentionally excluded and cannot be updated
 
         const updated = await prisma.userProgress.update({
@@ -58,7 +60,8 @@ export async function PUT(request: Request) {
                 age: age ? parseInt(age) : undefined,
                 bio: bio || undefined,
                 activeSkill: activeSkill || undefined,
-                profileImage: profileImage || undefined,
+                profileImage: profileImage === null ? null : (profileImage || undefined),
+                theme: theme || undefined,
                 updatedAt: new Date()
             },
             select: {
@@ -69,6 +72,7 @@ export async function PUT(request: Request) {
                 bio: true,
                 activeSkill: true,
                 profileImage: true,
+                theme: true,
                 updatedAt: true
             }
         });
